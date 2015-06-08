@@ -15,4 +15,5 @@
 .xsession-errors
 Desktop/
 .gitconfig
-
+.ssh/
+.keychain/

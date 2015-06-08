@@ -1,5 +1,6 @@
 #!/bin/bash
 
+keychain "${HOME}/.ssh/id_rsa"
 
 # add this to the bashrc
 #if [ -f ~/.wileyrc ]; then

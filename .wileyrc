@@ -52,6 +52,7 @@ alias gc='git checkout'
 alias gs='git status'
 
 alias tm='tmux'
+alias tmux='TERM=xterm-256color tmux'
 alias tmcp='tmux show-buffer | xsel -pb'
 
 alias mem=_memuseImpl

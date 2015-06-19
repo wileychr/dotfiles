@@ -50,6 +50,7 @@ alias gg='git grep'
 alias gb='git branch'
 alias gc='git checkout'
 alias gs='git status'
+alias gr='git rev-parse --show-toplevel'
 
 alias tm='tmux'
 alias tmux='TERM=xterm-256color tmux'

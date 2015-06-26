@@ -5,7 +5,7 @@ if $COLORTERM == 'gnome-terminal'
 endif
 
 " Thanks http://www.vim.org/scripts/script.php?script_id=2777
-colorscheme tir_black
+"colorscheme tir_black
 
 set nocompatible              " be iMproved, required
 filetype off                  " required

@@ -19,6 +19,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'octol/vim-cpp-enhanced-highlight'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -66,7 +67,8 @@ au BufRead,BufNewFile *.eclass,*.ebuild set filetype=sh
 autocmd BufRead,BufNewFile *.eclass setfiletype sh
 autocmd FileType sh setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
 autocmd FileType make setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
-autocmd FileType python setlocal tabstop=2 softtabstop=2 shiftwidth=2
+"autocmd FileType python setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4
 
 " This is a great idea, but it takes a longass time
 " kill any trailing whitespace on save

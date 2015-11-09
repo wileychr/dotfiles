@@ -32,6 +32,10 @@ _memuseImpl() {
   /bin/ps -u $(whoami) -o pid,rss,command | awk '{sum+=$2} END {print "Total " sum / 1024 " MB"}';
 }
 
+_git_hall_of_fame_impl() {
+git ls-files -z | xargs -0n1 git blame -w | ruby -n -e '$_ =~ /^.*?\((.*?)\s[\d]{4}/; puts $1.strip' | sort -f | uniq -c | sort -n
+}
+
 # no one touches but me
 umask 077
 
@@ -51,6 +55,8 @@ alias gb='git branch'
 alias gc='git checkout'
 alias gs='git status'
 alias gr='git rev-parse --show-toplevel'
+# Git hall of fame
+alias git-hof=_git_hall_of_fame_impl
 
 alias tm='tmux'
 alias tmux='TERM=xterm-256color tmux'

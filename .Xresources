@@ -22,31 +22,39 @@ xterm*toolBar:            false
 
 ! terminal colors ------------------------------------------------------------
 
-! tangoesque scheme
-*background: #111111
-*foreground: #babdb6
-! Black (not tango) + DarkGrey
-*color0:  #111111
-*color8:  #555753
-! DarkRed + Red
-*color1:  #ff6565
-*color9:  #ff8d8d
-! DarkGreen + Green
-*color2:  #93d44f
-*color10: #c8e7a8
-! DarkYellow + Yellow
-*color3:  #eab93d
-*color11: #ffc123
-! DarkBlue + Blue
-*color4:  #204a87
-*color12: #3465a4
-! DarkMagenta + Magenta
-*color5:  #ce5c00
-*color13: #f57900
-!DarkCyan + Cyan (both not tango)
-*color6:  #89b6e2
-*color14: #46a4ff
-! LightGrey + White
-*color7:  #cccccc
-*color15: #ffffff
+! special
+*.foreground:   #b9bcba
+*.background:   #1f1f1f
+*.cursorColor:  #b9bcba
 
+! black
+*.color0:       #3a3d43
+*.color8:       #888987
+
+! red
+*.color1:       #be3f48
+*.color9:       #fb001f
+
+! green
+*.color2:       #879a3b
+*.color10:      #0f722f
+
+! yellow
+*.color3:       #c5a635
+*.color11:      #c47033
+
+! blue
+*.color4:       #4f76a1
+*.color12:      #186de3
+
+! magenta
+*.color5:       #855c8d
+*.color13:      #fb0067
+
+! cyan
+*.color6:       #578fa4
+*.color14:      #2e706d
+
+! white
+*.color7:       #b9bcba
+*.color15:      #fdffb9

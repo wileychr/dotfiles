@@ -46,6 +46,10 @@ let g:ycm_filetype_blacklist = {
       \ 'conf' : 1,
       \ 'vim' : 1,
       \}
+let g:ycm_extra_conf_globlist = [
+      \ '/ws/aosp/system/tools/aidl/*',
+      \ '/ws/aosp/frameworks/native/*',
+      \]
 
 " Stop vim syntax highliting from complaining about C++11 initializers.
 let c_no_curly_error=1
@@ -122,3 +126,7 @@ nnoremap S :<C-U>exec "normal a".RepeatChar(nr2char(getchar()), v:count1)<CR>
 " Don't even both showing the vertical split separator.
 highlight VertSplit ctermfg=BLACK
 highlight VertSplit ctermbg=BLACK
+
+let mapleader=","
+nnoremap <leader>y :let g:ycm_auto_trigger=0<CR>                " turn off YCM
+nnoremap <leader>Y :let g:ycm_auto_trigger=1<CR>                "turn on YCM

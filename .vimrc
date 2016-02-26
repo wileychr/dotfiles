@@ -49,6 +49,7 @@ let g:ycm_filetype_blacklist = {
 let g:ycm_extra_conf_globlist = [
       \ '/ws/aosp/system/tools/aidl/*',
       \ '/ws/aosp/frameworks/native/*',
+      \ '/ws/brillo/product/google/common/brillo_camera/.ycm_extra_conf.py',
       \]
 
 " Stop vim syntax highliting from complaining about C++11 initializers.

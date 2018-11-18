@@ -1,0 +1,29 @@
+#!/bin/bash
+
+DISK_PATH=/dev/null
+
+for i in "$@"
+do
+case $i in
+    -d=*|--disk=*)
+    DISK_PATH="${i#*=}"
+    shift # past argument=value
+    ;;
+    *)
+    # unknown option
+    echo "Read script for usage"
+    exit 1
+    ;;
+esac
+done
+
+if [[ ${DISK_PATH} == "/dev/null" ]]; then
+  echo "Read script for usage (really)"
+  exit 2
+fi
+
+openssl enc -aes-256-ctr \
+    -pass pass:"$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64)" \
+    -nosalt < /dev/zero | \
+  pv -pterb -s $(sudo blockdev --getsize64 ${DISK_PATH}) | \
+  sudo dd of=${DISK_PATH} bs=1M

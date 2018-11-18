@@ -1,0 +1,8 @@
+# enable this with:
+#
+#  git config --global core.excludesfile ~/.gitignore_global
+#
+
+.ycm_extra_conf.py
+.ycm_extra_conf.pyc
+.vscode

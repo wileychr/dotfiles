@@ -1,0 +1,132 @@
+#!/bin/bash
+
+# add this to the bashrc
+#if [ -f ~/.wileyrc ]; then
+#  . ~/.wileyrc
+#fi
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+export PS1="\[\e[1;32m\][\u@\h \W\[\e[1;33m\]\$(git branch 2> /dev/null | grep -e '\* ' | sed 's/^..\(.*\)/{\1}/')\[\e[1;32m\]]\$\[\e[0m\] "
+
+stty -ctlecho
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+  eval "`dircolors -b`"
+  alias ls='ls --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
+
+go-env-create() {
+  local new_go_env
+  new_go_env="$HOME/go-envs/$1"
+  if [ -e "$new_go_env" ] ; then
+    echo "refusing to touch existing go env $new_go_env"
+    return 1
+  fi
+
+  mkdir -p "$new_go_env"
+  local activate_script_path
+  activate_script_path="$new_go_env/activate"
+  echo >> "$activate_script_path" '#!/bin/bash'
+  echo >> "$activate_script_path" '# Remove the old GOPATH bin'
+  echo >> "$activate_script_path" 'PATH=`echo $PATH | $HOME/.wileyfiles/clean-path.py $GOPATH/bin`'
+  echo >> "$activate_script_path" '# Set up the GOPATH for this new environment'
+  echo >> "$activate_script_path" 'GOPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"'
+  echo >> "$activate_script_path" '# Add that gopath to our PATH'
+  echo >> "$activate_script_path" 'PATH=$PATH:$GOPATH/bin'
+  echo >> "$activate_script_path" "PS1=\"(goenv $1)/\$PS1\""
+
+  mkdir -p "$new_go_env/bin"
+  mkdir -p "$new_go_env/pkg"
+  mkdir -p "$new_go_env/src"
+}
+
+go-package-coverage() {
+  go test -coverprofile=coverage.out $1 && go tool cover -html=coverage.out
+}
+
+additional_path_components=(
+  "/usr/local/sbin"
+  "/usr/local/bin"
+  "$HOME/.local/bin"
+)
+
+for path_component in "${additional_path_components[@]}" ; do
+  if [[ -d "$path_component" && "$PATH" != *"$path_component"* ]] ; then
+    PATH="$path_component:$PATH"
+  fi
+done
+# set PATH so it includes user's private bin if it exists
+local_path="$HOME/.local/bin"
+if [[ -d "$local_path" && "$PATH" != *"$local_path"* ]] ; then
+    PATH="$local_path:$PATH"
+fi
+
+_memuseImpl() {
+  /bin/ps -u $(whoami) -o pid,rss,command | awk '{sum+=$2} END {print "Total " sum / 1024 " MB"}';
+}
+
+_git_hall_of_fame_impl() {
+git ls-files -z | xargs -0n1 git blame -w | ruby -n -e '$_ =~ /^.*?\((.*?)\s[\d]{4}/; puts $1.strip' | sort -f | uniq -c | sort -n
+}
+
+_untilFailImpl() {
+  $@
+  while [ $? -eq 0 ]; do
+    $@
+  done
+}
+
+# This is probably overridden in .corp_rc
+WILEY_SNIPPETS_DIR=$HOME
+
+_snippets_impl() {
+  vim "${WILEY_SNIPPETS_DIR}"/`"$HOME"/.wileyfiles/snippets.py $@`.md
+}
+# no one touches but me
+umask 077
+
+export EDITOR=vim
+
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -CF'
+alias v=vim
+alias vi=vim
+alias vim='vim -O'
+
+alias gg='git grep'
+alias ga='git commit --all --amend -C HEAD'
+alias gb='git branch'
+alias gc='git checkout'
+alias gs='git status'
+alias gss='git show --stat --oneline HEAD'
+alias gr='git rev-parse --show-toplevel'
+gnb() {
+	git checkout -t origin/master -b wiley/$@
+}
+# Git hall of fame
+alias git-hof=_git_hall_of_fame_impl
+
+alias tm='tmux'
+if [[ "$(uname)" == "Darwin" ]]; then
+    alias tmcp='tmux show-buffer | reattach-to-user-namespace pbcopy'
+else
+    alias tmcp='tmux show-buffer | xsel -pb'
+fi
+
+alias cpu-temps='cat /sys/class/thermal/thermal_zone*/temp'
+alias mem=_memuseImpl
+
+alias snippets=_snippets_impl
+
+alias untilfail=_untilFailImpl
+
+if [ -f "${HOME}/.corp_rc" ]; then
+  . "${HOME}/.corp_rc"
+fi

@@ -27,8 +27,6 @@ VIM_CONFIG_FLAGS="--with-features=huge"
 VIM_CONFIG_FLAGS+=" --enable-multibyte"
 VIM_CONFIG_FLAGS+=" --enable-cscope"
 VIM_CONFIG_FLAGS+=" --enable-rubyinterp=yes"
-VIM_CONFIG_FLAGS+=" --enable-pythoninterp=yes"
-VIM_CONFIG_FLAGS+=" --with-python-config-dir=/usr/lib/python2.7/config"
 VIM_CONFIG_FLAGS+=" --enable-python3interp=yes"
 VIM_CONFIG_FLAGS+=" --with-python3-config-dir=/usr/lib/python3.5/config"
 VIM_CONFIG_FLAGS+=" --enable-perlinterp=yes"
@@ -41,7 +39,7 @@ fi
 mkdir -p $LOCAL_BIN
 if [ ! -e $LOCAL_BIN/vim ] ; then
   cd $SRC_CHECKOUT
-  git checkout "v8.0.0069"
+  git checkout "v8.1.0000"
   ./configure ${VIM_CONFIG_FLAGS}
   make VIMRUNTIMEDIR=$SRC_CHECKOUT/runtime -j8
   ln -s $SRC_CHECKOUT/src/vim $LOCAL_BIN/vim

@@ -46,7 +46,7 @@ go-env-create() {
   mkdir -p "$new_go_env/src"
 }
 
-go-package-coverage() {
+go-cover() {
   go test -coverprofile=coverage.out $1 && go tool cover -html=coverage.out
 }
 

@@ -6,6 +6,13 @@ source "$THIS_DIR/global_vars.sh"
 set -e
 set -o verbose
 
+SRC_CHECKOUT="$REPOSITORY_DIR/vim"
+mkdir -p $SRC_CHECKOUT
+
+if [ ! -d $SRC_CHECKOUT/.git ] ; then
+  git clone https://github.com/vim/vim.git $SRC_CHECKOUT
+fi
+
 if [[ "$(uname)" == "Darwin" ]]; then
   echo "Not installing dependencies, this is Darwin, you're on your own"
 else
@@ -13,13 +20,6 @@ else
 	libgtk2.0-dev libatk1.0-dev libbonoboui2-dev \
 	libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev \
 	python3-dev ruby-dev lua5.1 lua5.1-dev libperl-dev git
-fi
-
-SRC_CHECKOUT="$REPOSITORY_DIR/vim"
-mkdir -p $SRC_CHECKOUT
-
-if [ ! -d $SRC_CHECKOUT/.git ] ; then
-  git clone https://github.com/vim/vim.git $SRC_CHECKOUT
 fi
 
 
@@ -36,8 +36,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
 VIM_CONFIG_FLAGS+=" --with-lua-prefix=/usr/local"
 fi
 
-mkdir -p $LOCAL_BIN
 if [ ! -e $LOCAL_BIN/vim ] ; then
+  mkdir -p $LOCAL_BIN
   cd $SRC_CHECKOUT
   git checkout "v8.1.0000"
   ./configure ${VIM_CONFIG_FLAGS}

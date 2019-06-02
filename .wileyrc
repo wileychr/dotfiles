@@ -127,6 +127,11 @@ alias snippets=_snippets_impl
 
 alias untilfail=_untilFailImpl
 
-if [ -f "${HOME}/.corp_rc" ]; then
-  . "${HOME}/.corp_rc"
-fi
+bash_extensions=""
+bash_extensions+=" ${HOME}/repos/github.com/junegunn/fzf/shell/key-bindings.bash"
+bash_extensions+=" ${HOME}/repos/github.com/junegunn/fzf/shell/completion.bash"
+bash_extensions+=" ${HOME}/.corp_rc"
+for bash_extension in $bash_extensions
+do
+	test -f $bash_extension && source $bash_extension
+done

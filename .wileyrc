@@ -25,6 +25,10 @@ go-cover() {
   go test -coverprofile=coverage.out $1 && go tool cover -html=coverage.out
 }
 
+if [[ -d "$HOME/go" ]] ; then
+  export GOPATH="$HOME/go"
+fi
+
 additional_path_components=(
   "/usr/local/sbin"
   "/usr/local/bin"

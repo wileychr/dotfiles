@@ -1,4 +1,4 @@
 #!/bin/bash
 
 REPOSITORY_DIR="$HOME/repos"
-LOCAL_BIN="$HOME/.local/bin"
+LOCAL_BIN="$HOME/.wileylocal/bin"

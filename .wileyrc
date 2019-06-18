@@ -21,31 +21,6 @@ if [ -x /usr/bin/dircolors ]; then
   alias egrep='egrep --color=auto'
 fi
 
-go-env-create() {
-  local new_go_env
-  new_go_env="$HOME/go-envs/$1"
-  if [ -e "$new_go_env" ] ; then
-    echo "refusing to touch existing go env $new_go_env"
-    return 1
-  fi
-
-  mkdir -p "$new_go_env"
-  local activate_script_path
-  activate_script_path="$new_go_env/activate"
-  echo >> "$activate_script_path" '#!/bin/bash'
-  echo >> "$activate_script_path" '# Remove the old GOPATH bin'
-  echo >> "$activate_script_path" 'PATH=`echo $PATH | $HOME/.wileyfiles/clean-path.py $GOPATH/bin`'
-  echo >> "$activate_script_path" '# Set up the GOPATH for this new environment'
-  echo >> "$activate_script_path" 'GOPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"'
-  echo >> "$activate_script_path" '# Add that gopath to our PATH'
-  echo >> "$activate_script_path" 'PATH=$PATH:$GOPATH/bin'
-  echo >> "$activate_script_path" "PS1=\"(goenv $1)/\$PS1\""
-
-  mkdir -p "$new_go_env/bin"
-  mkdir -p "$new_go_env/pkg"
-  mkdir -p "$new_go_env/src"
-}
-
 go-cover() {
   go test -coverprofile=coverage.out $1 && go tool cover -html=coverage.out
 }
@@ -53,7 +28,8 @@ go-cover() {
 additional_path_components=(
   "/usr/local/sbin"
   "/usr/local/bin"
-  "$HOME/.local/bin"
+  "/usr/local/go/bin"
+  "$HOME/.wileylocal/bin"
 )
 
 for path_component in "${additional_path_components[@]}" ; do

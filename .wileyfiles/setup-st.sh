@@ -21,10 +21,8 @@ git reset --hard HEAD
 make clean
 rm -f config.h
 
-git checkout 0.7
-make config.h
-patch config.h ~/.wileyfiles/st-config.diff
-git apply ~/.wileyfiles/st-clipboard-git.diff
+git checkout 0.8.2
+cp "$THIS_DIR/st-0.8.2-config.h" config.h
 make
 
 mkdir -p $LOCAL_BIN

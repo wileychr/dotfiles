@@ -62,6 +62,10 @@ _untilFailImpl() {
   done
 }
 
+if [[ "$(uname)" == "Linux" ]] ; then
+  alias open='xdg-open'
+fi
+
 # This is probably overridden in .corp_rc
 WILEY_SNIPPETS_DIR=$HOME
 

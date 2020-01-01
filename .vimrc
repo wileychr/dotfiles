@@ -33,6 +33,7 @@ autocmd BufRead,BufNewFile *.eclass setfiletype sh
 autocmd FileType sh setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
 autocmd FileType make setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
 "autocmd FileType python setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100
 autocmd FileType javascript setlocal tabstop=4 softtabstop=4 shiftwidth=4
 "autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
@@ -70,12 +71,12 @@ set undolevels=1000           " number of undos stored
 set whichwrap=<,>,h,l,[,]
 set nofen
 
-" anything over 80 cols gets highlited by default (per language settings
+" anything over 100 cols gets highlited by default (per language settings
 " sometimes override this).  Trigger on entering either a new window or a new
 " buffer.
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-autocmd WinEnter * match OverLength /\%81v.\+/
-autocmd BufEnter * match OverLength /\%81v.\+/
+autocmd WinEnter * match OverLength /\%101v.\+/
+autocmd BufEnter * match OverLength /\%101v.\+/
 
 " hitting s <character> will now insert that character
 function! RepeatChar(char, count)
@@ -97,3 +98,10 @@ set novisualbell
 
 " Turn off markdown syntax highliting for spelling errors
 let g:markdown_enable_spell_checking = 0
+
+" command-t in large codebases needs to open a ton of files
+let g:CommandTMaxFiles=200000
+
+let g:CommandTWildIgnore=&wildignore . ",bazel-applied2,bazel-out,bazel-testlogs,bazel-bin"
+
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case

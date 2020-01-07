@@ -102,7 +102,7 @@ alias tm='tmux'
 if [[ "$(uname)" == "Darwin" ]]; then
     alias tmcp='tmux show-buffer | reattach-to-user-namespace pbcopy'
 else
-    alias tmcp='tmux show-buffer | xsel -ib'
+    alias tmcp='tmux show-buffer | xclip -selection clipboard'
 fi
 
 alias cpu-temps='cat /sys/class/thermal/thermal_zone*/temp'

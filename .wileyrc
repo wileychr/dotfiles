@@ -34,6 +34,7 @@ additional_path_components=(
   "/usr/local/bin"
   "/usr/local/go/bin"
   "$HOME/.wileylocal/bin"
+  "$GOPATH/bin"
 )
 
 for path_component in "${additional_path_components[@]}" ; do

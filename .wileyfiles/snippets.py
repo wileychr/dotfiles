@@ -7,7 +7,7 @@ def main():
     parser = argparse.ArgumentParser(
             description='Get the date of the most recent snippets file.')
     parser.add_argument(
-            'weeks_ago', type=int, default=0,
+            'weeks_ago', type=int, default=0, nargs='?',
             help='number of weeks ago to open snippets for')
     args = parser.parse_args()
 

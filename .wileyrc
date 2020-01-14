@@ -71,7 +71,14 @@ fi
 WILEY_SNIPPETS_DIR=$HOME
 
 _snippets_impl() {
-  vim "${WILEY_SNIPPETS_DIR}"/`"$HOME"/.wileyfiles/snippets.py $@`.md
+	local snippets_file_prefix
+	snippets_file_prefix=$("$HOME"/.wileyfiles/snippets.py $@)
+	local ret=$?
+	if [ $ret -ne 0 ] ; then
+		echo "refusing to open snippets file script exited with status: $ret"
+		return $ret
+	fi
+	vim "${WILEY_SNIPPETS_DIR}/${snippets_file_prefix}.md"
 }
 # no one touches but me
 umask 077

@@ -6,6 +6,8 @@ endif
 
 " Thanks http://www.vim.org/scripts/script.php?script_id=2777
 "colorscheme tir_black
+" https://github.com/sickill/vim-monokai
+colorscheme monokai
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -22,6 +24,7 @@ set shiftwidth=2
 set expandtab
 set backspace=2
 
+au BufRead,BufNewFile Dockerfile.* set filetype=dockerfile
 au BufRead,BufNewFile *.flex,*.jflex    set filetype=jflex
 au BufRead,BufNewFile *.cc.fsm set filetype=cpp
 au BufNewFile,BufRead *.cup set filetype=cup

@@ -133,3 +133,6 @@ for bash_extension in $bash_extensions
 do
 	test -f $bash_extension && source $bash_extension
 done
+
+# Disable the caps lock keycode
+setxkbmap -option ctrl:nocaps

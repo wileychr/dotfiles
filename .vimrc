@@ -25,6 +25,7 @@ set expandtab
 set backspace=2
 
 au BufRead,BufNewFile Dockerfile.* set filetype=dockerfile
+au BufRead,BufNewFile Makefile.* set filetype=make
 au BufRead,BufNewFile *.flex,*.jflex    set filetype=jflex
 au BufRead,BufNewFile *.cc.fsm set filetype=cpp
 au BufNewFile,BufRead *.cup set filetype=cup
@@ -33,7 +34,8 @@ au BufNewFile,BufRead *.aidl set filetype=java
 au BufRead,BufNewFile *.eclass,*.ebuild set filetype=sh
 
 autocmd BufRead,BufNewFile *.eclass setfiletype sh
-autocmd FileType sh setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
+"autocmd FileType sh setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
+autocmd FileType sh setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 autocmd FileType make setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
 "autocmd FileType python setlocal tabstop=2 softtabstop=2 shiftwidth=2
 autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100

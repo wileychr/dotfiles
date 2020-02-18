@@ -31,6 +31,10 @@ go-cover() {
   go test -coverprofile=coverage.out $1 && go tool cover -html=coverage.out
 }
 
+function start-conky() {
+  conky >/dev/null 2>&1 &
+}
+
 if [[ -d "$HOME/go" ]] ; then
   export GOPATH="$HOME/go"
 fi

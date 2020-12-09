@@ -106,6 +106,7 @@ let g:markdown_enable_spell_checking = 0
 
 " command-t in large codebases needs to open a ton of files
 let g:CommandTMaxFiles=200000
+let g:CommandTMaxFiles=400000 
 
 let g:CommandTWildIgnore=&wildignore . ",bazel-applied2,bazel-out,bazel-testlogs,bazel-bin"
 

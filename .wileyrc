@@ -83,7 +83,11 @@ WILEY_SNIPPETS_DIR=$HOME
 _snippets_impl() {
 	local snippets_file_prefix
   local file_list
-  for num in "$@" ; do
+  local args="$@"
+  if [[ "$args" -eq "" ]] ; then
+    args=0
+  fi
+  for num in "$args" ; do
     snippets_file_prefix=$("$HOME"/.wileyfiles/snippets.py $num)
     local ret=$?
     if [ $ret -ne 0 ] ; then

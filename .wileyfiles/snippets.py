@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import datetime
 import argparse
@@ -14,7 +14,7 @@ def main():
     today = datetime.date.today() - datetime.timedelta(weeks=args.weeks_ago)
     # Monday is 0, go back to the most recent Monday
     snippets_date = today - datetime.timedelta(days=today.weekday())
-    print snippets_date.isoformat()
+    print(snippets_date.isoformat())
 
 if __name__ == '__main__':
     main()

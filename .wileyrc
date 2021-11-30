@@ -133,7 +133,7 @@ alias git-hof=_git_hall_of_fame_impl
 
 alias tm='tmux'
 if [[ "$(uname)" == "Darwin" ]]; then
-    alias tmcp='tmux show-buffer | reattach-to-user-namespace pbcopy'
+    alias tmcp='tmux show-buffer | pbcopy'
 else
     alias tmcp='tmux show-buffer | xclip -selection clipboard'
 fi
@@ -155,4 +155,6 @@ do
 done
 
 # Disable the caps lock keycode
-setxkbmap -option ctrl:nocaps
+if [[ "$(uname)" != "Darwin" ]] ; then
+  setxkbmap -option ctrl:nocaps
+fi

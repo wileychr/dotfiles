@@ -8,13 +8,13 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-function curr-git-branch() {
+function _currGitBranch() {
   git branch 2> /dev/null | grep -e '\* ' | sed 's/^..\(.*\)/{\1}/'
 }
 color_green='\[\e[1;32m\]'
 color_yellow='\[\e[1;33m\]'
 color_reset='\[\e[0m\]'
-export PS1="${color_green}[\u@\h \W${color_yellow}\$(curr-git-branch)${color_green}]\$${color_reset} "
+export PS1="${color_green}[\u@\h \W${color_yellow}\$(_currGitBranch)${color_green}]\$${color_reset} "
 
 stty -ctlecho
 
@@ -26,14 +26,6 @@ if [ -x /usr/bin/dircolors ]; then
   alias fgrep='fgrep --color=auto'
   alias egrep='egrep --color=auto'
 fi
-
-go-cover() {
-  go test -coverprofile=coverage.out $1 && go tool cover -html=coverage.out
-}
-
-function start-conky() {
-  conky >/dev/null 2>&1 &
-}
 
 if [[ -d "$HOME/go" ]] ; then
   export GOPATH="$HOME/go"
@@ -114,9 +106,20 @@ export EDITOR=vim
 alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
-alias v=vim
+v() {
+  if [[ "$#" != 0 ]] ; then
+    vim -O "$@"
+  else
+    if command -v fzf >/dev/null && command -v rg >/dev/null ; then
+      vim $(rg --files | fzf)
+    else
+      vim
+    fi
+  fi
+}
 alias vi=vim
 alias vim='vim -O'
+
 
 alias gg='git grep'
 alias ga='git commit --all --amend -C HEAD'
@@ -146,8 +149,7 @@ alias snippets=_snippets_impl
 alias untilfail=_untilFailImpl
 
 bash_extensions=""
-bash_extensions+=" ${HOME}/repos/github.com/junegunn/fzf/shell/key-bindings.bash"
-bash_extensions+=" ${HOME}/repos/github.com/junegunn/fzf/shell/completion.bash"
+bash_extensions+=" ${HOME}/.fzf.bash"
 bash_extensions+=" ${HOME}/.corp_rc"
 for bash_extension in $bash_extensions
 do

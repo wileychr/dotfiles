@@ -163,5 +163,7 @@ fi
 
 if [[ "$(uname)" == "Darwin" ]] ; then
   export BASH_SILENCE_DEPRECATION_WARNING=1
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+  BREW_BASH_COMPLETION=/usr/local/etc/bash_completion
+  test -r $BREW_BASH_COMPLETION && source "$BREW_BASH_COMPLETION"
+  unset BREW_BASH_COMPLETION
 fi

@@ -4,14 +4,12 @@ set nocompatible
 " Pull in the fzf vim base plugin
 set runtimepath+=/usr/local/opt/fzf
 
-nnoremap <Leader>t :Files<CR>
-
 syntax on
 
 "  https://github.com/neovim/neovim/wiki/FAQ#how-can-i-use-true-color-in-the-terminal
 set termguicolors
 " https://github.com/sickill/vim-monokai
-colorscheme monokai
+colorscheme monokai_soda
 
 
 au BufNewFile,BufRead Dockerfile.*      set filetype=dockerfile
@@ -68,6 +66,9 @@ highlight VertSplit ctermfg=BLACK
 highlight VertSplit ctermbg=BLACK
 
 let mapleader=","
+
+nnoremap <Leader>t :Files<CR>
+nnoremap <Leader>f :Rg<CR>
 
 " Turn off markdown syntax highliting for spelling errors
 let g:markdown_enable_spell_checking = 0

@@ -1,5 +1,7 @@
 set nocompatible
 
+lua require('plugins')
+
 
 " Pull in the fzf vim base plugin
 set runtimepath+=/usr/local/opt/fzf
@@ -72,3 +74,8 @@ nnoremap <Leader>f :Rg<CR>
 
 " Turn off markdown syntax highliting for spelling errors
 let g:markdown_enable_spell_checking = 0
+
+lua require('lspconfig')
+
+autocmd BufWritePre *.go lua vim.lsp.buf.formatting()
+autocmd BufWritePre *.go lua goimports(1000)

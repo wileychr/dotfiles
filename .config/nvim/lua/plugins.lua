@@ -6,28 +6,44 @@
 return require('packer').startup(function()
   -- Packer can manage itself
   use {
-		'wbthomason/packer.nvim',
-		commit = '851c62c5ecd3b5adc91665feda8f977e104162a5'
-	}
+    'wbthomason/packer.nvim',
+    -- Latest 2022-01-01
+    commit = '851c62c5ecd3b5adc91665feda8f977e104162a5'
+  }
 
-	use {
-		'rstacruz/vim-closer',
-		commit = '26bba80f4d987f12141da522d69aa1fa4aff4436'
-	}
-
+  use {
+    'rstacruz/vim-closer',
+    -- Latest 2022-01-01
+    commit = '26bba80f4d987f12141da522d69aa1fa4aff4436'
+  }
+  use {
+    'junegunn/fzf',
+    -- Latest 2022-01-01
+    commit = 'ae7753878f8740fbdb2cef5617911ef83255349b'
+  }
   use {
     'junegunn/fzf.vim',
+    -- Latest 2022-01-01
     commit = 'd6aa21476b2854694e6aa7b0941b8992a906c5ec'
   }
-
   use {
-    'tanvirtin/monokai.nvim',
-    commit = 'eee34ab38e62315c1609484672c60e8a7338d4d2'
+    "neovim/nvim-lspconfig",
+    -- Latest 2022-01-01
+    commit = '4b21740aae18ecec2d527b79d1072b3b01bb5a2a'
   }
 
   use {
-    "neovim/nvim-lspconfig",
-    commit = '4b21740aae18ecec2d527b79d1072b3b01bb5a2a'
+    'mhinz/vim-grepper',
+    -- Latest 2022-01-01
+    commit = '2b93535752ffcb312f9fab73d90e80dc9f2e60fc'
+  }
+
+
+  -- Various color schemes
+  use {
+    'sickill/vim-monokai',
+    -- Latest 2022-01-01
+    commit = 'ae7753878f8740fbdb2cef5617911ef83255349b'
   }
 end)
 

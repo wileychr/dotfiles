@@ -99,17 +99,26 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-v() {
-  if [[ "$#" != 0 ]] ; then
-    "$VIM_BINARY" -O "$@"
-  else
-    if command -v fzf >/dev/null && command -v rg >/dev/null ; then
-      "$VIM_BINARY" $(rg --files | fzf)
+if command -v fzf >/dev/null && command -v rg >/dev/null ; then
+  # fzf has some default behavior when you invoke it like `fzf` to
+  # search the result of running `find .`.  Make this respect
+  # .gitignore (and be super fast) by using rg.
+  export FZF_DEFAULT_COMMAND="rg --files"
+  export FZF_CTRL_T_COMMAND="rg --files"
+  v() {
+    if [[ "$#" != 0 ]] ; then
+      "$VIM_BINARY" -O "$@"
     else
-      "$VIM_BINARY"
+      "$VIM_BINARY" $(fzf)
     fi
-  fi
-}
+  }
+else
+  echo "fzf enabled v command not enabled because fzf or rg is not installed."
+  v() {
+    "$VIM_BINARY"
+  }
+fi
+
 alias vi="'$VIM_BINARY' -O"
 alias vim="'$VIM_BINARY' -O"
 

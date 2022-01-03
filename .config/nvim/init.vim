@@ -10,8 +10,7 @@ syntax on
 
 "  https://github.com/neovim/neovim/wiki/FAQ#how-can-i-use-true-color-in-the-terminal
 set termguicolors
-" https://github.com/sickill/vim-monokai
-colorscheme monokai_soda
+colorscheme monokai
 
 
 au BufNewFile,BufRead Dockerfile.*      set filetype=dockerfile

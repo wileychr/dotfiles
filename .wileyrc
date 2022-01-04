@@ -99,29 +99,8 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-if command -v fzf >/dev/null && command -v rg >/dev/null ; then
-  # fzf has some default behavior when you invoke it like `fzf` to
-  # search the result of running `find .`.  Make this respect
-  # .gitignore (and be super fast) by using rg.
-  export FZF_DEFAULT_COMMAND="rg --files"
-  export FZF_CTRL_T_COMMAND="rg --files"
-  v() {
-    if [[ "$#" != 0 ]] ; then
-      "$VIM_BINARY" -O "$@"
-    else
-      "$VIM_BINARY" $(fzf)
-    fi
-  }
-else
-  echo "fzf enabled v command not enabled because fzf or rg is not installed."
-  v() {
-    "$VIM_BINARY"
-  }
-fi
-
 alias vi="'$VIM_BINARY' -O"
 alias vim="'$VIM_BINARY' -O"
-
 
 alias gg='git grep'
 alias ga='git commit --all --amend -C HEAD'
@@ -150,6 +129,27 @@ bash_extensions=(
 for bash_extension in "${bash_extensions[@]}" ; do
 	test -f "$bash_extension" && source "$bash_extension"
 done
+
+if command -v fzf >/dev/null && command -v rg >/dev/null ; then
+  # fzf has some default behavior when you invoke it like `fzf` to
+  # search the result of running `find .`.  Make this respect
+  # .gitignore (and be super fast) by using rg.
+  export FZF_DEFAULT_COMMAND="rg --files || rg -u --files"
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  v() {
+    if [[ "$#" != 0 ]] ; then
+      "$VIM_BINARY" -O "$@"
+    else
+      "$VIM_BINARY" $(fzf)
+    fi
+  }
+else
+  echo "fzf enabled v command not enabled because fzf or rg is not installed."
+  v() {
+    "$VIM_BINARY"
+  }
+fi
+
 
 if [[ "$(uname)" == "Linux" ]] ; then
   alias tmcp='tmux show-buffer | xclip -selection clipboard'

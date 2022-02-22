@@ -78,15 +78,25 @@ _snippets_impl() {
     file_list="$file_list ${WILEY_SNIPPETS_DIR}/${snippets_file_prefix}.md"
   done
   "$VIM_BINARY" -O $file_list
-  if [[ -d "$WILEY_SNIPPETS_DIR/.git" && "$(cd $WILEY_SNIPPETS_DIR; git diff --stat)" != "" ]] ; then
-    echo "Pushing snippet changes to git"
-    pushd "$WILEY_SNIPPETS_DIR" 2>/dev/null
-    git add *.md
-    git commit -m "Snippets update $(date -I)"
-    git push
-    popd 2>/dev/null
-  fi
 }
+
+_snippets_push_impl() {
+  if [[ ! -d "$WILEY_SNIPPETS_DIR/.git" ]] ; then
+    echo "cannot push snippets, it doesn't look like a git repository?"
+    return 1
+  fi
+  if [[ "$(cd $WILEY_SNIPPETS_DIR; git diff --stat)" == "" ]] ; then
+    echo "cannot push snippets, there do not seem to be local changes?"
+    return 1
+  fi
+  echo "Pushing snippet changes to git"
+  pushd "$WILEY_SNIPPETS_DIR" 2>/dev/null
+  git add *.md
+  git commit -m "Snippets update $(date -I)"
+  git push
+  popd 2>/dev/null
+}
+
 # no one touches but me
 umask 077
 
@@ -119,6 +129,7 @@ alias cpu-temps='cat /sys/class/thermal/thermal_zone*/temp'
 alias mem=_memuseImpl
 
 alias snippets=_snippets_impl
+alias snippets_push=_snippets_push_impl
 
 alias untilfail=_untilFailImpl
 

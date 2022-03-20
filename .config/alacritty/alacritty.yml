@@ -59,3 +59,7 @@ colors:
     magenta: '#8181a6'
     cyan:    '#87ceeb'
     white:   '#c1cdc1'
+
+font:
+  normal:
+    family: Ubuntu Mono

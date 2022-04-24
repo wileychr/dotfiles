@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# add this to the bashrc
-#if [ -f ~/.wileyrc ]; then
-#  . ~/.wileyrc
-#fi
+# add this to your .bashrc
+#
+#     test -f ~/.wileyrc && source  ~/.wileyrc
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -22,6 +21,7 @@ if [[ -d "$HOME/go" ]] ; then
   export GOPATH="$HOME/go"
 fi
 
+# Set up our path to include various additional directories
 additional_path_components=(
   "/usr/local/sbin"
   "/usr/local/bin"
@@ -36,10 +36,20 @@ for path_component in "${additional_path_components[@]}" ; do
   fi
 done
 
+NVIM_PACKER_PATH="${HOME}/.local/share/nvim/site/pack/packer/start/packer.nvim"
 VIM_BINARY=`which nvim`
-if [[ ! -x "$VIM_BINARY" ]] ; then
+if [[ ! -x "$VIM_BINARY" || ! -d "$NVIM_PACKER_PATH" ]] ; then
+  if [[ ! -d "$NVIM_PACKER_PATH" ]] ; then
+    echo Neovim package manager is not installed.  Try running:
+    echo "  git clone --depth 1 https://github.com/wbthomason/packer.nvim $NVIM_PACKER_PATH"
+  fi
   echo 'Using vim (rather than nvim) as our editor.'
   VIM_BINARY=`which vim`
+else
+  if [[ ! $(set -e; ls "${HOME}/.local/share/nvim/site/pack/packer/start" | grep -v packer.nvim) ]] ; then
+    echo "Found Neovim and packer, but didn't find installed packages."
+    echo "Open neovim, ignore that error, and run :PackerInstall"
+  fi
 fi
 export EDITOR="$VIM_BINARY"
 
@@ -134,6 +144,9 @@ alias snippets_push=_snippets_push_impl
 alias untilfail=_untilFailImpl
 
 bash_extensions=(
+  /usr/share/doc/fzf/examples/key-bindings.bash
+  /usr/share/doc/fzf/examples/completion.bash
+  # Probably we have installed via apt, but this is the default for manual install.
   "${HOME}/.fzf.bash"
   "${HOME}/.corp_rc"
 )

@@ -95,19 +95,11 @@ highlight VertSplit ctermfg=BLACK
 highlight VertSplit ctermbg=BLACK
 
 let mapleader=","
-nnoremap <leader>y :let g:ycm_auto_trigger=0<CR>                " turn off YCM
-nnoremap <leader>Y :let g:ycm_auto_trigger=1<CR>                "turn on YCM
 
 " The bell is distracting as I issue streams of invalid commands to vim.
 set novisualbell
 
 " Turn off markdown syntax highliting for spelling errors
 let g:markdown_enable_spell_checking = 0
-
-" command-t in large codebases needs to open a ton of files
-let g:CommandTMaxFiles=200000
-let g:CommandTMaxFiles=400000 
-
-let g:CommandTWildIgnore=&wildignore . ",bazel-applied2,bazel-out,bazel-testlogs,bazel-bin"
 
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case

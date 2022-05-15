@@ -1,3 +1,6 @@
+-- Have to enable autocomplete before bringing in the plugin
+vim.g.coq_settings = { auto_start = true }
+
 require('plugins')
 
 vim.g.mapleader=","
@@ -71,22 +74,16 @@ set novisualbell
 set undolevels=1000           " number of undos stored
 set whichwrap=<,>,h,l,[,]
 set nofen
+
 ]])
 
 vim.g.markdown_enable_spell_checking = false
 
-
--- LSPConfig Mappings from https://github.com/neovim/nvim-lspconfig
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
-vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
+  local opts = { noremap=true, silent=true }
+
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -108,12 +105,11 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
 
   vim.opt.tagfunc = "v:lua.vim.lsp.tagfunc"
-
 end
 
 require('lspconfig').gopls.setup {
   on_attach = on_attach,
-  cmd = {"gopls", "serve", "-debug=localhost:6061", "-logfile=/tmp/lies/run1"},
+  -- cmd = {"gopls", "serve", "-debug=localhost:6061", "-logfile=/tmp/lies/run1"},
   flags = {
     -- This will be the default in neovim 0.7+
     debounce_text_changes = 150,
@@ -121,7 +117,7 @@ require('lspconfig').gopls.setup {
   settings = {
     gopls = {
       env = {
-        GOPACKAGESDRIVER = '$HOME/.wileyfiles/gopackagesdriver.sh',
+        GOPACKAGESDRIVER = os.getenv('HOME') .. '/.wileyfiles/gopackagesdriver.sh',
         -- Work around some bug with symlinks + bazel in 1.18
         --   https://github.com/bazelbuild/rules_go/issues/3110
         GOPACKAGESDRIVER_BAZEL_BUILD_FLAGS = '--strategy=GoStdlibList=local',

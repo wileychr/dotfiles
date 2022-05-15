@@ -2,7 +2,7 @@
 
 # add this to your .bashrc
 #
-#     test -f ~/.wileyrc && source  ~/.wileyrc
+#     test -f ~/.wileyfiles/bashrc.sh && source  ~/.wileyfiles/bashrc.sh
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return

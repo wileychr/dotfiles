@@ -23,8 +23,8 @@ return require('packer').startup(function()
   }
   use {
     'junegunn/fzf.vim',
-    -- Latest 2022-01-01
-    commit = 'd6aa21476b2854694e6aa7b0941b8992a906c5ec'
+    -- Latest 0.30.0 2020-04-04
+    commit = '209366754892b04a01fd40de03cb9874a1e8fef7'
   }
   use {
     "neovim/nvim-lspconfig",

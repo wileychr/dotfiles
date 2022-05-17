@@ -131,3 +131,24 @@ require('lspconfig').gopls.setup {
     },
   },
 }
+
+-- Note this requires you to have run `pip install 'python-lsp-server[all]'`
+require('lspconfig').pylsp.setup({
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    },
+    settings = {
+      pylsp = {
+        plugins = {
+          pylint = { enabled = true, executable = "pylint" },
+          pyflakes = { enabled = true },
+          pycodestyle = { enabled = false },
+          jedi_completion = { fuzzy = true },
+          pyls_isort = { enabled = true },
+          pylsp_mypy = { enabled = true },
+        },
+      },
+    },
+    -- capabilities = capabilities,
+})

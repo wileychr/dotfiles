@@ -15,8 +15,8 @@ nnoremap <Leader>f :Rg<CR>
 vim.cmd([[
 syntax on
 "  https://github.com/neovim/neovim/wiki/FAQ#how-can-i-use-true-color-in-the-terminal
-set termguicolors
-colorscheme monokai
+" set termguicolors
+" colorscheme monokai
 ]])
 
 vim.cmd([[

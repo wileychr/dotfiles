@@ -66,8 +66,12 @@ set incsearch                 " incremental search
 set hlsearch                  " highlighting when searching
 
 " Make tab completion of file paths more bashlike
+" Setting `wildmode=full` switches from bash style tab complete to a pop-up
+"   menu.  However, it seems less functional.
+"set wildmode=full
 set wildmode=longest,list
 set wildmenu
+set pumblend=15
 
 set noerrorbells              " no bells in terminal
 set novisualbell

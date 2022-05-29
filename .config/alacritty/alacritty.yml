@@ -63,7 +63,3 @@ colors:
 font:
   normal:
     family: Ubuntu Mono
-  size: 13
-
-window:
-  startup_mode: SimpleFullscreen

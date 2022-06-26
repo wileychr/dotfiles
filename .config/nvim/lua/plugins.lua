@@ -11,36 +11,32 @@ return require('packer').startup(function()
     commit = '851c62c5ecd3b5adc91665feda8f977e104162a5'
   }
   use {
-    'junegunn/fzf',
-    -- Latest 2022-01-01
-    commit = 'ae7753878f8740fbdb2cef5617911ef83255349b'
+    'wileychr/fzf',
+    commit = '2707af403a106ddf864d9c2bae2c5e2f9b07b05f'
   }
   use {
-    'junegunn/fzf.vim',
-    -- Latest 0.30.0 2020-04-04
-    commit = '209366754892b04a01fd40de03cb9874a1e8fef7'
+    'wileychr/fzf.vim',
+    commit = 'd5f1f8641b24c0fd5b10a299824362a2a1b20ae0'
   }
   use {
     "neovim/nvim-lspconfig",
     -- Latest 2022-01-01
     commit = '4b21740aae18ecec2d527b79d1072b3b01bb5a2a'
   }
-
   -- Various color schemes
   use {
     'sickill/vim-monokai',
     -- Latest 2022-01-01
     commit = 'ae7753878f8740fbdb2cef5617911ef83255349b'
   }
-
   use {
     'ms-jpq/coq_nvim',
     commit = 'f7f09cb'
   }
-
   use {
-    'dcampos/nvim-snippy',
-    commit = 'a4512c9'
+    'justinmk/vim-sneak',
+    commit = '94c2de47ab301d476a2baec9ffda07367046bec9'
   }
+
 end)
 

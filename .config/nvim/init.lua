@@ -2,7 +2,6 @@
 -- Note you must have already `sudo apt install python3-venv`
 -- and if you want the Python LSP to work: `pip install "python-lsp-server[all]"`
 vim.g.coq_settings = { auto_start = 'shut-up' }
-
 require('plugins')
 
 vim.g.mapleader=","
@@ -113,9 +112,17 @@ local on_attach = function(client, bufnr)
   vim.opt.tagfunc = "v:lua.vim.lsp.tagfunc"
 end
 
-require('lspconfig').gopls.setup {
+cwd = os.getenv("PWD") or io.popen("cd"):read()
+function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
+GOPACKAGESDRIVER_PATH = cwd .. "/tools/golang/go_packages_driver.bash"
+if (file_exists(GOPACKAGESDRIVER_PATH))
+then
+require('lspconfig').gopls.setup({
   on_attach = on_attach,
-  -- cmd = {"gopls", "serve", "-debug=localhost:6061", "-logfile=/tmp/lies/run1"},
+  -- cmd = {GOPACKAGESDRIVER_PATH},
   flags = {
     -- This will be the default in neovim 0.7+
     debounce_text_changes = 150,
@@ -123,7 +130,7 @@ require('lspconfig').gopls.setup {
   settings = {
     gopls = {
       env = {
-        GOPACKAGESDRIVER = os.getenv('HOME') .. '/.wileyfiles/gopackagesdriver.sh',
+        GOPACKAGESDRIVER = GOPACKAGESDRIVER_PATH,
         -- Work around some bug with symlinks + bazel in 1.18
         --   https://github.com/bazelbuild/rules_go/issues/3110
         GOPACKAGESDRIVER_BAZEL_BUILD_FLAGS = '--strategy=GoStdlibList=local',
@@ -132,11 +139,14 @@ require('lspconfig').gopls.setup {
         "-bazel-bin",
         "-bazel-out",
         "-bazel-testlogs",
-        "-bazel-mypkg",
+        "-bazel-applied2",
+        "-data",
       },
     },
   },
-}
+})
+end
+
 
 -- Note this requires you to have run `pip install 'python-lsp-server[all]'`
 require('lspconfig').pylsp.setup({

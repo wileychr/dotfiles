@@ -195,4 +195,23 @@ if [[ "$(uname)" == "Darwin" ]] ; then
   export BASH_SILENCE_DEPRECATION_WARNING=1
   BREW_BASH_COMPLETION=/usr/local/etc/bash_completion
   test -r $BREW_BASH_COMPLETION && source "$BREW_BASH_COMPLETION"
+  # OSX doesn't know how to autocomplete SSH hosts?
+  _complete_ssh_hosts ()
+  {
+          COMPREPLY=()
+          cur="${COMP_WORDS[COMP_CWORD]}"
+          comp_ssh_hosts=`cat ~/.ssh/known_hosts | \
+                          cut -f 1 -d ' ' | \
+                          sed -e s/,.*//g | \
+                          grep -v ^# | \
+                          uniq | \
+                          grep -v "\[" ;
+                  cat ~/.ssh/config | \
+                          grep "^Host " | \
+                          awk '{print $2}'
+                  `
+          COMPREPLY=( $(compgen -W "${comp_ssh_hosts}" -- $cur))
+          return 0
+  }
+  complete -F _complete_ssh_hosts ssh
 fi

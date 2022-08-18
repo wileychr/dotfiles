@@ -110,6 +110,8 @@ _snippets_push_impl() {
 # no one touches but me
 umask 077
 
+# Use raw control sequences with less by default to enable color output.
+alias less='less -R'
 alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CFG'

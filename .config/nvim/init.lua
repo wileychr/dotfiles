@@ -34,7 +34,7 @@ au BufNewFile,BufRead *.eclass,*.ebuild set filetype=sh
 " Language specific overrides
 autocmd FileType sh setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 autocmd FileType make setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
-autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100
+autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100 foldmethod=indent
 autocmd FileType javascript setlocal tabstop=4 softtabstop=4 shiftwidth=4
 "autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
 

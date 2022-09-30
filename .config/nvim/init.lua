@@ -10,7 +10,8 @@ vim.cmd([[
 " Pull in the fzf vim base plugin
 " set runtimepath+=/usr/local/opt/fzf
 nnoremap <Leader>t :Files<CR>
-nnoremap <Leader>f :Rg<CR>
+" Note the trailing space is helpful here
+nnoremap <Leader>f :Rg 
 ]])
 
 vim.cmd([[

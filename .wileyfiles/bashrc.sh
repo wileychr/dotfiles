@@ -122,7 +122,6 @@ alias egrep='egrep --color=auto'
 alias vi="'$VIM_BINARY' -O"
 alias vim="'$VIM_BINARY' -O"
 
-alias gg='git grep'
 alias ga='git commit --all --amend -C HEAD'
 alias gb='git branch'
 alias gc='git checkout'

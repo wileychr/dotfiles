@@ -8,7 +8,7 @@ vim.g.mapleader=","
 
 vim.cmd([[
 " Pull in the fzf vim base plugin
-set runtimepath+=/usr/local/opt/fzf
+" set runtimepath+=/usr/local/opt/fzf
 nnoremap <Leader>t :Files<CR>
 nnoremap <Leader>f :Rg<CR>
 ]])
@@ -34,6 +34,7 @@ au BufNewFile,BufRead *.eclass,*.ebuild set filetype=sh
 autocmd FileType sh setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 autocmd FileType make setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
 autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100 foldmethod=indent
+autocmd FileType markdown setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100
 autocmd FileType javascript setlocal tabstop=4 softtabstop=4 shiftwidth=4
 "autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
@@ -157,6 +158,11 @@ require('lspconfig').pylsp.setup({
     settings = {
       pylsp = {
         plugins = {
+          black = {
+            enabled = true,
+            line_length = 100
+          },
+          -- python3 -m pip install python-lsp-black
           pylint = { enabled = true, executable = "pylint" },
           pyflakes = { enabled = true },
           pycodestyle = { enabled = false },

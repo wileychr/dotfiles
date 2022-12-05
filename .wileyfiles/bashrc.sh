@@ -179,7 +179,7 @@ fi
 function replace {
   local pattern="$1"
   local replacement="$2"
-  rg "$pattern" | cut -d: -f1 | sort | uniq | xargs sed -i "s|$pattern|$replacement|g"
+  rg -- "$pattern" | cut -d: -f1 | sort | uniq | xargs sed -i "s|$pattern|$replacement|g"
 }
 
 

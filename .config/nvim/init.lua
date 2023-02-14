@@ -147,6 +147,15 @@ require('lspconfig').gopls.setup({
     },
   },
 })
+else
+require('lspconfig').gopls.setup({
+  on_attach = on_attach,
+  settings = {
+    gopls = {
+    },
+  },
+})
+
 end
 
 

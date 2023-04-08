@@ -216,3 +216,13 @@ if [[ "$(uname)" == "Darwin" ]] ; then
   }
   complete -F _complete_ssh_hosts ssh
 fi
+
+function print_proc_mem {
+  local process_pid="$1"
+  if [[ "$process_pid" == "" ]] ; then
+    echo "Usage: get_process_memory <pid>"
+    return 1
+  fi
+  # Sum the proportional set size (Pss) of all the memory regions in the process.
+  cat "/proc/$process_pid/smaps" | grep -i 'Pss:' |  awk '{Total+=$2} END {print Total}' | xargs -I{} echo {} kB
+}

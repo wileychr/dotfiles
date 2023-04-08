@@ -39,6 +39,8 @@ autocmd FileType markdown setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidt
 autocmd FileType javascript setlocal tabstop=4 softtabstop=4 shiftwidth=4
 "autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
+autocmd BufNewFile,BufRead *.go setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
+
 " Don't even both showing the vertical split separator.
 highlight VertSplit ctermfg=BLACK
 highlight VertSplit ctermbg=BLACK
@@ -99,7 +101,7 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>c', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.format({async=true})<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
 
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
@@ -124,7 +126,7 @@ if (file_exists(GOPACKAGESDRIVER_PATH))
 then
 require('lspconfig').gopls.setup({
   on_attach = on_attach,
-  -- cmd = {GOPACKAGESDRIVER_PATH},
+  -- cmd = {'gopls', '-rpc.trace', '--debug=localhost:6060'},
   flags = {
     -- This will be the default in neovim 0.7+
     debounce_text_changes = 150,
@@ -150,12 +152,7 @@ require('lspconfig').gopls.setup({
 else
 require('lspconfig').gopls.setup({
   on_attach = on_attach,
-  settings = {
-    gopls = {
-    },
-  },
 })
-
 end
 
 
@@ -184,3 +181,22 @@ require('lspconfig').pylsp.setup({
     },
     -- capabilities = capabilities,
 })
+
+require('ofirkai').setup {
+}
+
+-- https://github.com/ms-jpq/coq.thirdparty
+-- require("coq_3p") {
+--  { src = "copilot", short_name = "COP", accept_key = "<c-f>" }
+-- }
+
+-- https://www.reddit.com/r/neovim/comments/sk70rk/using_github_copilot_in_neovim_tab_map_has_been/
+-- vim.g.copilot_assume_mapped = true
+
+-- Note this requires you to have installed via: `npm install -g graphql-language-service-cli graphql-language-service-server`
+-- https://neovim.discourse.group/t/nvim-lspconfig-cant-get-graphql-lsp-working/2688/11
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#graphql
+-- require'lspconfig'.graphql.setup{}
+
+-- vim.lsp.set_log_level('trace')
+

@@ -23,11 +23,13 @@ return require('packer').startup(function()
     -- Latest 2022-01-01
     commit = '4b21740aae18ecec2d527b79d1072b3b01bb5a2a'
   }
-  -- Various color schemes
   use {
-    'sickill/vim-monokai',
+    'ofirgall/ofirkai.nvim',
+    -- Latest 2023-04-06
+    commit = 'c795283a1d6806db203bba545010a0696f8fc8f8'
+    -- 'sickill/vim-monokai',
     -- Latest 2022-01-01
-    commit = 'ae7753878f8740fbdb2cef5617911ef83255349b'
+    -- commit = 'ae7753878f8740fbdb2cef5617911ef83255349b'
   }
   use {
     'ms-jpq/coq_nvim',
@@ -37,6 +39,20 @@ return require('packer').startup(function()
     'justinmk/vim-sneak',
     commit = '94c2de47ab301d476a2baec9ffda07367046bec9'
   }
-
+  use {
+    'jparise/vim-graphql',
+    commit = '42818fb3db74fc843e3db3cdc72bf72198cd224c'
+  }
+  use {
+    'ms-jpq/coq.thirdparty',
+    commit = '6b52ae60235525d6a00fc091de4598ac88a63ecc'
+  }
+  use {
+    'github/copilot.vim',
+    -- latest commit as of 2023-03-27
+    -- see pre-reqs on https://github.com/github/copilot.vim
+    commit = '9e869d29e62e36b7eb6fb238a4ca6a6237e7d78b'
+  }
+  
 end)
 

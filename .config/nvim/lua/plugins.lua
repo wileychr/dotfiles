@@ -24,12 +24,32 @@ return require('packer').startup(function()
     commit = '4b21740aae18ecec2d527b79d1072b3b01bb5a2a'
   }
   use {
-    'ofirgall/ofirkai.nvim',
-    -- Latest 2023-04-06
-    commit = 'c795283a1d6806db203bba545010a0696f8fc8f8'
-    -- 'sickill/vim-monokai',
-    -- Latest 2022-01-01
-    -- commit = 'ae7753878f8740fbdb2cef5617911ef83255349b'
+    'ray-x/starry.nvim',
+    commit = '9c4f8669acb302300e1495d4b1f1e618524a48f4',
+    setup = function()
+vim.g.starry_bold = true  --set to false to disable bold globally
+vim.g.starry_italic = true --set to false to disable italic globally
+vim.g.starry_italic_comments = true
+vim.g.starry_italic_string = false
+vim.g.starry_italic_keywords = false
+vim.g.starry_italic_functions = false
+vim.g.starry_italic_variables = false
+vim.g.starry_contrast = true
+vim.g.starry_borders = false
+vim.g.starry_disable_background = false  --set to true to disable background and allow transparent background
+vim.g.starry_style_fix=true  --disable random loading
+vim.g.starry_style=''
+--moonlight' -- load moonlight everytime or
+vim.g.starry_darker_contrast=true  --darker background
+vim.g.starry_deep_black=false       --OLED deep black
+vim.g.starry_italic_keywords=false
+vim.g.starry_italic_functions=false
+vim.g.starry_set_hl=false -- Note: enable for nvim 0.6+, it is faster (loading time down to 4~6s from 7~11s), but it does
+-- not overwrite old values and may has some side effects
+vim.g.starry_daylight_switch=false  --this allow using brighter color
+-- other themes: dracula, oceanic, dracula_blood, 'deep ocean', darker, palenight, monokai, mariana, emerald, middlenight_blue
+
+    end
   }
   use {
     'ms-jpq/coq_nvim',

@@ -11,7 +11,7 @@ vim.cmd([[
 " set runtimepath+=/usr/local/opt/fzf
 nnoremap <Leader>t :Files<CR>
 " Note the trailing space is helpful here
-nnoremap <Leader>f :Rg 
+nnoremap <Leader>f :Rg
 ]])
 
 vim.cmd([[
@@ -182,8 +182,12 @@ require('lspconfig').pylsp.setup({
     -- capabilities = capabilities,
 })
 
-require('ofirkai').setup {
-}
+require('starry').setup({})
+vim.cmd([[
+colorscheme earlysummer
+]])
+
+
 
 -- https://github.com/ms-jpq/coq.thirdparty
 -- require("coq_3p") {

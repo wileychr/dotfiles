@@ -182,10 +182,7 @@ require('lspconfig').pylsp.setup({
     -- capabilities = capabilities,
 })
 
-require('starry').setup({})
-vim.cmd([[
-colorscheme earlysummer
-]])
+-- vim.cmd([[ colorscheme earlysummer ]])
 
 
 

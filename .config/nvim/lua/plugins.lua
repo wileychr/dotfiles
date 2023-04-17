@@ -36,7 +36,8 @@ return require('packer').startup(function()
     opt = true,
     run = ':COQdeps',
     config = function()
-      require('config.coq').setup()
+      -- forgot to check this in
+--      require('config.coq').setup()
     end,
     requires = {
       { 'ms-jpq/coq.artifacts', branch = 'artifacts' },

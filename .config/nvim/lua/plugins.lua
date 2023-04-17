@@ -27,11 +27,22 @@ return require('packer').startup(function()
     -- v0.1.6 2023-02-05
     commit = '255e07ce2a05627d482d2de77308bba51b90470c'
   }
+
   use {
     -- coq is an extremely fast auto-complete implementation for nvim
     'ms-jpq/coq_nvim',
-    -- CI (AGP) - 2023-04-02 01:01 (has neovim 0.9 compat support)
-    commit = '45137deb2a34a8b1482fa0f49927e171223a9173'
+    branch = 'coq',
+    event = 'InsertEnter',
+    opt = true,
+    run = ':COQdeps',
+    config = function()
+      require('config.coq').setup()
+    end,
+    requires = {
+      { 'ms-jpq/coq.artifacts', branch = 'artifacts' },
+      { 'ms-jpq/coq.thirdparty', branch = '3p', module = 'coq_3p' },
+    },
+    disable = false,
   }
   use {
     -- treesitter is a "parser generator tool" and parsing library:
@@ -56,6 +67,7 @@ return require('packer').startup(function()
     commit = '9c4f8669acb302300e1495d4b1f1e618524a48f4'
   }
   --[[
+  use 'ray-x/aurora'
   use 'marko-cerovac/material.nvim'
   use 'folke/tokyonight.nvim'
   use({ 'monsonjeremy/onedark.nvim', branch = 'treesitter' })

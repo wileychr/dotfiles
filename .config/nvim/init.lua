@@ -1,6 +1,4 @@
--- Have to enable autocomplete before bringing in the plugin
--- Note you must have already `sudo apt install python3-venv`
--- and if you want the Python LSP to work: `pip install "python-lsp-server[all]"`
+-- Set a magic flag to get coq to shut up on startup
 vim.g.coq_settings = { auto_start = 'shut-up' }
 require('plugins')
 
@@ -156,6 +154,7 @@ require('lspconfig').gopls.setup({
 end
 
 
+-- Note you must have already `sudo apt install python3-venv`
 -- Note this requires you to have run `pip install 'python-lsp-server[all]'`
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,

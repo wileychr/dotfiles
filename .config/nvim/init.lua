@@ -30,7 +30,7 @@ au BufNewFile,BufRead *.eclass,*.ebuild set filetype=sh
 " Language specific overrides
 autocmd FileType sh setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 autocmd FileType make setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
-autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100 foldmethod=indent
+autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab textwidth=100 foldmethod=indent
 autocmd FileType markdown setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=100
 autocmd FileType javascript setlocal tabstop=4 softtabstop=4 shiftwidth=4
 "autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
@@ -123,10 +123,6 @@ then
 require('lspconfig').gopls.setup({
   on_attach = on_attach,
   -- cmd = {'gopls', '-rpc.trace', '--debug=localhost:6060'},
-  flags = {
-    -- This will be the default in neovim 0.7+
-    debounce_text_changes = 150,
-  },
   settings = {
     gopls = {
       env = {
@@ -157,22 +153,28 @@ end
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,
     flags = {
-      debounce_text_changes = 150,
+      -- pylsp is slow sometimes, especially with big files.
+      -- Don't let it respond to text changes more often than every 300ms.
+      debounce_text_changes = 300,
     },
     settings = {
       pylsp = {
         plugins = {
+          -- python3 -m pip install python-lsp-black
           black = {
             enabled = true,
             line_length = 100
           },
-          -- python3 -m pip install python-lsp-black
-          pylint = { enabled = true, executable = "pylint" },
-          pyflakes = { enabled = true },
-          pycodestyle = { enabled = false },
           jedi_completion = { fuzzy = true },
-          pyls_isort = { enabled = true },
+          -- python3 -m pip install python-lsp-ruff
+          ruff = { enabled = true },
+          -- python3 -m pip install pylsp-mypy
           pylsp_mypy = { enabled = true },
+          -- pylsp will try and enable these by default
+          pylint = { enabled = false },
+          pyflakes = { enabled = false },
+          pycodestyle = { enabled = false },
+          pyls_isort = { enabled = false },
         },
       },
     },
@@ -196,6 +198,11 @@ require'nvim-treesitter.configs'.setup {
 
   ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
   -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+  -- This seems to fix the issue where automatic indentation puts extra whitespace for me.
+  indent = {
+    enable = true,
+  },
 
   highlight = {
     enable = true,

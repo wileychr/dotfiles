@@ -31,13 +31,14 @@ return require('packer').startup(function()
   use {
     -- coq is an extremely fast auto-complete implementation for nvim
     'ms-jpq/coq_nvim',
-    branch = 'coq',
+    -- merged 2023-02-10
+    commit = '0e5f8ce68a5a6f8b2452f6fa35ce870e3bf9e7c8',
+    -- branch = 'coq',
     event = 'InsertEnter',
     opt = true,
     run = ':COQdeps',
     config = function()
-      -- forgot to check this in
---      require('config.coq').setup()
+      require('config.coq').setup()
     end,
     requires = {
       { 'ms-jpq/coq.artifacts', branch = 'artifacts' },

@@ -1,5 +1,3 @@
--- Set a magic flag to get coq to shut up on startup
-vim.g.coq_settings = { auto_start = 'shut-up' }
 require('plugins')
 
 vim.g.mapleader=","

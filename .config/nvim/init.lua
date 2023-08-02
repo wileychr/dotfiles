@@ -7,7 +7,7 @@ vim.cmd([[
 " set runtimepath+=/usr/local/opt/fzf
 nnoremap <Leader>t :Files<CR>
 " Note the trailing space is helpful here
-nnoremap <Leader>f :Rg
+nnoremap <Leader>f :Rg 
 ]])
 
 vim.cmd([[

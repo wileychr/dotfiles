@@ -129,7 +129,7 @@ function file_exists(name)
    local f=io.open(name,"r")
    if f~=nil then io.close(f) return true else return false end
 end
-GOPACKAGESDRIVER_PATH = cwd .. "/tools/golang/go_packages_driver.bash"
+GOPACKAGESDRIVER_PATH = cwd .. "/dev/go_packages_driver.bash"
 if (file_exists(GOPACKAGESDRIVER_PATH))
 then
 require('lspconfig').gopls.setup({
@@ -164,11 +164,6 @@ end
 -- Note this requires you to have run `pip install 'python-lsp-server[all]'`
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,
-    flags = {
-      -- pylsp is slow sometimes, especially with big files.
-      -- Don't let it respond to text changes more often than every 300ms.
-      debounce_text_changes = 300,
-    },
     settings = {
       pylsp = {
         plugins = {

@@ -47,7 +47,7 @@ autocmd FileType markdown setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidt
 autocmd FileType javascript setlocal tabstop=4 softtabstop=4 shiftwidth=4
 "autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
-autocmd BufNewFile,BufRead *.go setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab
+autocmd BufNewFile,BufRead *.go setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab textwidth=100
 
 " Don't even both showing the vertical split separator.
 highlight VertSplit ctermfg=BLACK
@@ -148,6 +148,7 @@ require('lspconfig').gopls.setup({
         "-bazel-out",
         "-bazel-testlogs",
         "-bazel-applied2",
+        "-simian/client/frontend",
         "-data",
       },
     },

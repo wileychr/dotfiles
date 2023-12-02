@@ -1,20 +1,34 @@
-require('plugins')
-
+-- Set our leader key first so that plugins will have a consistent view
 vim.g.mapleader=","
 
-vim.cmd([[
-" Pull in the fzf vim base plugin
-" set runtimepath+=/usr/local/opt/fzf
-nnoremap <Leader>t :Files<CR>
-" Note the trailing space is helpful here
-nnoremap <Leader>f :Rg 
-]])
+-- Important paths for lazy.nvim:
+--   ~/.local/share/nvim/lazy/lazy.nvim
+--   ~/.local/state/nvim/lazy/lazy.nvim
+--   ~/.config/nvim/lazy-lock.json
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+-- Install our package manager, lazy.nvim, if it isn't already.
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Load plugins from ~/.config/nvim/lua/plugins.lua
+local plugin_spec = require("plugins")
+require("lazy").setup(plugin_spec)
 
 vim.cmd([[
-syntax on
-"  https://github.com/neovim/neovim/wiki/FAQ#how-can-i-use-true-color-in-the-terminal
-" set termguicolors
-" colorscheme monokai
+" set an alias for the Files command
+nnoremap <Leader>t :Files<CR>
+" Note that there is a trailing space on the next line intentionally.
+nnoremap <Leader>f :Rg 
 nnoremap <silent> <C-j> :RG <C-r><C-w><CR>
 
 function! RipgrepFzf(query, fullscreen)
@@ -30,6 +44,21 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 ]])
 
 vim.cmd([[
+" Default tab settings
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set backspace=2
+set expandtab
+
+" I read somewhere that recent versions of vim don't perform filetype
+" detection automatically on startup.
+filetype on
+filetype plugin on
+filetype indent on
+syntax on
+colorscheme monokai
+
 au BufNewFile,BufRead Dockerfile.*      set filetype=dockerfile
 au BufNewFile,BufRead Makefile.*        set filetype=make
 au BufNewFile,BufRead *.flex,*.jflex    set filetype=jflex
@@ -49,19 +78,12 @@ autocmd FileType javascript setlocal tabstop=4 softtabstop=4 shiftwidth=4
 
 autocmd BufNewFile,BufRead *.go setlocal tabstop=8 softtabstop=8 shiftwidth=8 noexpandtab textwidth=100
 
-" Don't even both showing the vertical split separator.
+" Don't bother showing the vertical split separator.
 highlight VertSplit ctermfg=BLACK
 highlight VertSplit ctermbg=BLACK
 ]])
 
 vim.cmd([[
-
-" Default tab settings
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set backspace=2
-set expandtab
 
 set number                    " show/hide line numbers (nu/nonu)
 set scrolloff=5               " scroll offsett, min lines above/below cursor
@@ -236,23 +258,3 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = false,
   },
 }
-
-vim.cmd([[ colorscheme monokai ]])
-
-
-
--- https://github.com/ms-jpq/coq.thirdparty
--- require("coq_3p") {
---  { src = "copilot", short_name = "COP", accept_key = "<c-f>" }
--- }
-
--- https://www.reddit.com/r/neovim/comments/sk70rk/using_github_copilot_in_neovim_tab_map_has_been/
--- vim.g.copilot_assume_mapped = true
-
--- Note this requires you to have installed via: `npm install -g graphql-language-service-cli graphql-language-service-server`
--- https://neovim.discourse.group/t/nvim-lspconfig-cant-get-graphql-lsp-working/2688/11
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#graphql
--- require'lspconfig'.graphql.setup{}
-
--- vim.lsp.set_log_level('trace')
-

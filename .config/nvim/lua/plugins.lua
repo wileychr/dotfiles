@@ -1,36 +1,28 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
-
--- Only required if you have packer configured as `opt`
--- vim.cmd [[packadd packer.nvim]]
-
-return require('packer').startup(function()
-  -- Packer can manage itself
-  use {
-    'wbthomason/packer.nvim',
-    -- Latest 2022-01-01
-    commit = '851c62c5ecd3b5adc91665feda8f977e104162a5'
-  }
-  use {
+return {
+  {
     -- The real fzf repository did something that caused their git history
     -- to change, and thus a fork was born.
     'wileychr/fzf',
+    lazy = false,
     commit = '2707af403a106ddf864d9c2bae2c5e2f9b07b05f'
-  }
-  use {
+  },
+  {
     -- The real fzf repository did something that caused their git history
     -- to change, and thus a fork was born.
     'wileychr/fzf.vim',
+    lazy = false,
     commit = 'd5f1f8641b24c0fd5b10a299824362a2a1b20ae0'
-  }
-  use {
+  },
+  {
     "neovim/nvim-lspconfig",
+    lazy = false,
     -- v0.1.6 2023-02-05
     commit = '255e07ce2a05627d482d2de77308bba51b90470c'
-  }
-
-  use {
+  },
+  {
     -- coq is an extremely fast auto-complete implementation for nvim
     'ms-jpq/coq_nvim',
+    lazy = false,
     -- merged 2023-02-10
     commit = '0e5f8ce68a5a6f8b2452f6fa35ce870e3bf9e7c8',
     -- branch = 'coq',
@@ -38,15 +30,11 @@ return require('packer').startup(function()
     opt = true,
     run = ':COQdeps',
     config = function()
-      require('config.coq').setup()
+      require('coq_config').setup()
     end,
-    requires = {
-      { 'ms-jpq/coq.artifacts', branch = 'artifacts' },
-      { 'ms-jpq/coq.thirdparty', branch = '3p', module = 'coq_3p' },
-    },
     disable = false,
-  }
-  use {
+  },
+  {
     -- treesitter is a "parser generator tool" and parsing library:
     -- it is a C library that lets you "parse" the AST of many languages
     -- and interact with that parse tree.
@@ -54,46 +42,17 @@ return require('packer').startup(function()
     -- for intance to enable AST aware color schemes.
     'nvim-treesitter/nvim-treesitter',
     -- v0.9.0 2023-04
-    commit = 'cc360a9beb1b30d172438f640e2c3450358c4086',
+    -- commit = 'cc360a9beb1b30d172438f640e2c3450358c4086',
+    -- v0.9.1 2023-12-01 latest tagged release
+    commit = '63260da18bf273c76b8e2ea0db84eb901cab49ce',
     run = function()
       local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
       ts_update()
     end,
-  }
-
-  --
-  -- Various repositories exporting color schemes.  Not load bearing.
-  --
-  use {
+  },
+  {
+    -- This seems to provide the monokai theme.
     'ray-x/starry.nvim',
     commit = '9c4f8669acb302300e1495d4b1f1e618524a48f4'
   }
-  --[[
-  use 'ray-x/aurora'
-  use 'marko-cerovac/material.nvim'
-  use 'folke/tokyonight.nvim'
-  use({ 'monsonjeremy/onedark.nvim', branch = 'treesitter' })
-
-  use {
-    'jparise/vim-graphql',
-    commit = '42818fb3db74fc843e3db3cdc72bf72198cd224c'
-  }
-  --]]
-
-  --[[
-  I didn't actually find Copilot that useful.
-  use {
-    -- Somehow I needed this extension for copilot to work
-    'ms-jpq/coq.thirdparty',
-    commit = '6b52ae60235525d6a00fc091de4598ac88a63ecc'
-  }
-  use {
-    'github/copilot.vim',
-    -- latest commit as of 2023-03-27
-    -- see pre-reqs on https://github.com/github/copilot.vim
-    commit = '9e869d29e62e36b7eb6fb238a4ca6a6237e7d78b'
-  }
-  --]]
-
-end)
-
+}

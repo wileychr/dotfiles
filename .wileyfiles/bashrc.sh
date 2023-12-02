@@ -36,21 +36,7 @@ for path_component in "${additional_path_components[@]}" ; do
   fi
 done
 
-NVIM_PACKER_PATH="${HOME}/.local/share/nvim/site/pack/packer/start/packer.nvim"
 VIM_BINARY=`which nvim`
-if [[ ! -x "$VIM_BINARY" || ! -d "$NVIM_PACKER_PATH" ]] ; then
-  if [[ ! -d "$NVIM_PACKER_PATH" ]] ; then
-    echo Neovim package manager is not installed.  Try running:
-    echo "  git clone --depth 1 https://github.com/wbthomason/packer.nvim $NVIM_PACKER_PATH"
-  fi
-  echo 'Using vim (rather than nvim) as our editor.'
-  VIM_BINARY=`which vim`
-else
-  if [[ ! $(set -e; ls "${HOME}/.local/share/nvim/site/pack/packer/start" | grep -v packer.nvim) ]] ; then
-    echo "Found Neovim and packer, but didn't find installed packages."
-    echo "Open neovim, ignore that error, and run :PackerInstall"
-  fi
-fi
 export EDITOR="$VIM_BINARY"
 
 _memuseImpl() {

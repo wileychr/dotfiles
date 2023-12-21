@@ -187,24 +187,27 @@ end
 -- Note this requires you to have run `pip install 'python-lsp-server[all]'`
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,
+
+    -- See https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
     settings = {
       pylsp = {
         plugins = {
-          -- python3 -m pip install python-lsp-black
-          black = {
-            enabled = true,
-            line_length = 100
-          },
           jedi_completion = { fuzzy = true },
           -- python3 -m pip install python-lsp-ruff
-          ruff = { enabled = true },
           -- python3 -m pip install pylsp-mypy
           pylsp_mypy = { enabled = true },
+
           -- pylsp will try and enable these by default
           pylint = { enabled = false },
           pyflakes = { enabled = false },
           pycodestyle = { enabled = false },
-          pyls_isort = { enabled = false },
+
+          ruff = { enabled = true },
+          pyls_isort = { enabled = true },
+          -- We want to use ruff for formatting. Unfortunately, pylsp requires us to disable all other alternatives.
+          autopep8 = { enabled = false },
+          yapf = { enabled = false },
+          black = { enabled = false },
         },
       },
     },

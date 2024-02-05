@@ -20,19 +20,17 @@ return {
     commit = '255e07ce2a05627d482d2de77308bba51b90470c'
   },
   {
-    -- coq is an extremely fast auto-complete implementation for nvim
-    'ms-jpq/coq_nvim',
+    -- The completion engine itself is called nvim-cmp
+    'hrsh7th/nvim-cmp',
     lazy = false,
-    -- merged 2023-02-10
-    commit = '0e5f8ce68a5a6f8b2452f6fa35ce870e3bf9e7c8',
-    -- branch = 'coq',
-    event = 'InsertEnter',
-    opt = true,
-    run = ':COQdeps',
-    config = function()
-      require('coq_config').setup()
-    end,
-    disable = false,
+    -- latest 2023-02-04
+    commit = '04e0ca376d6abdbfc8b52180f8ea236cbfddf782'
+  },
+  {
+    -- The cmp-nvim-lsp pulls in completions from nvim-lsp
+    'hrsh7th/cmp-nvim-lsp',
+    lazy = false,
+    commit = '5af77f54de1b16c34b23cba810150689a3a90312'
   },
   {
     -- treesitter is a "parser generator tool" and parsing library:
@@ -44,7 +42,9 @@ return {
     -- v0.9.0 2023-04
     -- commit = 'cc360a9beb1b30d172438f640e2c3450358c4086',
     -- v0.9.1 2023-12-01 latest tagged release
-    commit = '63260da18bf273c76b8e2ea0db84eb901cab49ce',
+    -- commit = '63260da18bf273c76b8e2ea0db84eb901cab49ce',
+    -- v0.9.2
+    commit = 'f197a15b0d1e8d555263af20add51450e5aaa1f0',
     run = function()
       local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
       ts_update()

@@ -258,3 +258,9 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = false,
   },
 }
+
+require'cmp'.setup {
+  sources = {
+    { name = 'nvim_lsp' }
+  }
+}

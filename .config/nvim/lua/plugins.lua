@@ -29,8 +29,24 @@ return {
   {
     -- The cmp-nvim-lsp pulls in completions from nvim-lsp
     'hrsh7th/cmp-nvim-lsp',
-    lazy = false,
     commit = '5af77f54de1b16c34b23cba810150689a3a90312'
+  },
+  {
+    'hrsh7th/cmp-path',
+    commit = '91ff86cd9c29299a64f968ebb45846c485725f23'
+  },
+  {
+    'hrsh7th/cmp-nvim-lsp-signature-help',
+    commit = '3d8912ebeb56e5ae08ef0906e3a54de1c66b92f1'
+  },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+    opts = { }
   },
   {
     -- treesitter is a "parser generator tool" and parsing library:

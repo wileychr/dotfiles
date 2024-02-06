@@ -50,6 +50,7 @@ set softtabstop=2
 set shiftwidth=2
 set backspace=2
 set expandtab
+set textwidth=100
 
 " I read somewhere that recent versions of vim don't perform filetype
 " detection automatically on startup.

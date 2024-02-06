@@ -62,4 +62,11 @@ colors:
 
 font:
   normal:
-    family: Ubuntu Mono
+    # This needs to be installed into the operating system:
+    # - Download from: https://www.nerdfonts.com/font-downloads
+    # - Unzip into ~/.local/share/fonts/ on Ubuntu
+    # - I used the font browser built in to Ubuntu to figure out the naming.
+    family: Inconsolata Nerd Font Mono
+  offset:
+    y: -1
+  size: 12

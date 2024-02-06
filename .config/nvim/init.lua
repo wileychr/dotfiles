@@ -272,8 +272,37 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
-require'cmp'.setup {
+local cmp = require("cmp")
+cmp.setup({
+  mapping = {
+    ["<tab>"] = cmp.mapping(function(fallback)
+      if not cmp.visible() then
+        return fallback()
+      end
+
+      local entry = cmp.get_selected_entry()
+      if not entry then
+        return fallback()
+      end
+      cmp.confirm()
+    end, {"i","s"}),
+    -- Use the arrow keys to move up and down between autocomplete options.
+    -- This is a little janky unless you have up/down bound to the home row somewhere.
+    ["<down>"] = cmp.mapping(function(fallback)
+      if not cmp.visible() then
+        return fallback()
+      end
+      cmp.select_next_item()
+    end, {"i","s"}),
+    ["<up>"] = cmp.mapping(function(fallback)
+      if not cmp.visible() then
+        return fallback()
+      end
+      cmp.select_prev_item()
+    end, {"i","s"}),
+  },
   sources = {
-    { name = 'nvim_lsp' }
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lsp_signature_help' }
   }
-}
+})

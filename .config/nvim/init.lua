@@ -194,7 +194,7 @@ end
 
 
 -- Note you must have already `sudo apt install python3-venv`
--- Note this requires you to have run `pip install 'python-lsp-server[all]'`
+-- Note this requires you to have run `python3 -m pip install 'python-lsp-server[all]'`
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,
 

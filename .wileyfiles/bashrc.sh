@@ -36,7 +36,7 @@ for path_component in "${additional_path_components[@]}" ; do
   fi
 done
 
-VIM_BINARY=`which nvim`
+VIM_BINARY="$(which nvim || which vim || which vi)"
 export EDITOR="$VIM_BINARY"
 
 _memuseImpl() {

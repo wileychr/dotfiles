@@ -55,7 +55,7 @@ _untilFailImpl() {
 }
 
 # This is probably overridden in .corp_rc
-WILEY_SNIPPETS_DIR=$HOME
+WILEY_SNIPPETS_DIR=${WILEY_SNIPPETS_DIR-$HOME}
 
 _snippets_impl() {
 	local snippets_file_prefix
@@ -65,13 +65,13 @@ _snippets_impl() {
     args=0
   fi
   for num in $args ; do
-    snippets_file_prefix=$("$HOME"/.wileyfiles/snippets.py $num)
+    snippets_file_path=$("$HOME"/.wileyfiles/snippets.py --snippets_dir "$WILEY_SNIPPETS_DIR" --weeks_ago $num)
     local ret=$?
     if [ $ret -ne 0 ] ; then
       echo "refusing to open snippets file script exited with status: $ret"
       return $ret
     fi
-    file_list="$file_list ${WILEY_SNIPPETS_DIR}/${snippets_file_prefix}.md"
+    file_list="$file_list ${snippets_file_path}"
   done
   "$VIM_BINARY" -O $file_list
 }

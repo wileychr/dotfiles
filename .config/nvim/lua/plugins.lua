@@ -16,8 +16,8 @@ return {
   {
     "neovim/nvim-lspconfig",
     lazy = false,
-    -- v0.1.6 2023-02-05
-    commit = '255e07ce2a05627d482d2de77308bba51b90470c'
+    -- v0.1.8 2024-05-21
+    commit = '0b8165cf95806bc4bb8f745bb0c92021b2ed4b98'
   },
   {
     -- The completion engine itself is called nvim-cmp

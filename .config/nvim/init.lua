@@ -193,11 +193,12 @@ require('lspconfig').gopls.setup({
 end
 
 
--- Note you must have already `sudo apt install python3-venv`
+-- Note you must have already installed venv:
+--   `sudo apt install python3-venv`
 -- Note this requires you to have run `python3 -m pip install 'python-lsp-server[all]'`
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,
-
+    cmd = {os.getenv("HOME") .. '/.wileyfiles/vim_py_env/bin/python3', '-m', 'pylsp'},
     -- See https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
     settings = {
       pylsp = {

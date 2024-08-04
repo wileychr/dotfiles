@@ -193,12 +193,15 @@ require('lspconfig').gopls.setup({
 end
 
 
--- Note you must have already installed venv:
---   `sudo apt install python3-venv`
--- Note this requires you to have run `python3 -m pip install 'python-lsp-server[all]'`
+-- We will run the python language server inside a virtual env.
+-- To boostrap this environment on Ubuntu 24.04
+--   sudo apt install python3.12-venv
+--   ~/.wileyfiles/vim_py_env/bin/python3 -m pip install python-lsp-server[all] python-lsp-ruff pylsp-mypy
+PYLSP_VENV = os.getenv("HOME") .. '/.wileyfiles/vim_py_env'
+
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,
-    cmd = {os.getenv("HOME") .. '/.wileyfiles/vim_py_env/bin/python3', '-m', 'pylsp'},
+    cmd = {PYLSP_VENV .. '/bin/python3', '-m', 'pylsp'},
     -- See https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
     settings = {
       pylsp = {

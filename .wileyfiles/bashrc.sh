@@ -126,6 +126,10 @@ alias dps='docker ps --format "table {{ .Image }}\t{{ .Command }}\t{{ .Status }}
 alias cpu-temps='cat /sys/class/thermal/thermal_zone*/temp'
 alias mem=_memuseImpl
 
+# For all those times when you have a file system path and want a java package
+# echo com/my/path | to_java_package
+alias to_java_package='sed "s|/|.|g"'
+
 alias snippets=_snippets_impl
 alias snippets_push=_snippets_push_impl
 

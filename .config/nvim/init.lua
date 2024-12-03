@@ -193,15 +193,34 @@ require('lspconfig').gopls.setup({
 end
 
 
+function all_trim(s)
+  return s:match"^%s*(.*)":match"(.-)%s*$"
+end
+
 -- We will run the python language server inside a virtual env.
 -- To boostrap this environment on Ubuntu 24.04
 --   sudo apt install python3.12-venv
 --   ~/.wileyfiles/vim_py_env/bin/python3 -m pip install python-lsp-server[all] python-lsp-ruff pylsp-mypy
-PYLSP_VENV = os.getenv("HOME") .. '/.wileyfiles/vim_py_env'
+HOMEDIR_PYTHON3_EXEC = os.getenv("HOME") .. '/.wileyfiles/vim_py_env/bin/python3'
+function get_venv_python3()
+  if vim.fn.getcwd() == os.getenv("HOME") then
+    -- Running find in the homedir can cause permissions issues on OSX.
+    return HOMEDIR_PYTHON3_EXEC
+  end
+  local handle = io.popen('find . -name python3 -maxdepth 3')
+  local result = all_trim(handle:read("*a"))
+  handle:close()
+  if result == "" then
+    return os.getenv("HOME") .. '/.wileyfiles/vim_py_env/bin/python3'
+  end
+  return result
+end
+
+PYTHON3_EXEC = get_venv_python3()
 
 require('lspconfig').pylsp.setup({
     on_attach = on_attach,
-    cmd = {PYLSP_VENV .. '/bin/python3', '-m', 'pylsp'},
+    cmd = {PYTHON3_EXEC, '-m', 'pylsp'},
     -- See https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
     settings = {
       pylsp = {

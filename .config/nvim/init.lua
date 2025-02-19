@@ -297,7 +297,37 @@ require'nvim-treesitter.configs'.setup {
 
 local cmp = require("cmp")
 cmp.setup({
+  -- Example mappings: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings
   mapping = {
+    ["<CR>"] = cmp.mapping({
+       i = function(fallback)
+         if cmp.visible() and cmp.get_active_entry() then
+           cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+         else
+           fallback()
+         end
+       end,
+       s = cmp.mapping.confirm({ select = true }),
+       c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+    }),
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      --elseif has_words_before() then
+      --  cmp.complete()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    --[[
     ["<tab>"] = cmp.mapping(function(fallback)
       if not cmp.visible() then
         return fallback()
@@ -323,6 +353,7 @@ cmp.setup({
       end
       cmp.select_prev_item()
     end, {"i","s"}),
+    --]]
   },
   sources = {
     { name = 'nvim_lsp' },

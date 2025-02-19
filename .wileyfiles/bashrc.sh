@@ -60,20 +60,11 @@ WILEY_SNIPPETS_DIR=${WILEY_SNIPPETS_DIR-$HOME}
 _snippets_impl() {
 	local snippets_file_prefix
   local file_list
-  local args=$@
-  if [[ "$#" -eq "0" ]] ; then
-    args=0
+  local cmd="$HOME/.wileyfiles/snippets.py --snippets_dir $WILEY_SNIPPETS_DIR"
+  if [[ "$#" != "0" ]] ; then
+    cmd="$cmd --weeks_ago $@"
   fi
-  for num in $args ; do
-    snippets_file_path=$("$HOME"/.wileyfiles/snippets.py --snippets_dir "$WILEY_SNIPPETS_DIR" --weeks_ago $num)
-    local ret=$?
-    if [ $ret -ne 0 ] ; then
-      echo "refusing to open snippets file script exited with status: $ret"
-      return $ret
-    fi
-    file_list="$file_list ${snippets_file_path}"
-  done
-  "$VIM_BINARY" -O $file_list
+  "$VIM_BINARY" -O $($cmd)
 }
 
 _snippets_push_impl() {

@@ -160,7 +160,13 @@ fi
 function replace {
   local pattern="$1"
   local replacement="$2"
-  rg -- "$pattern" | cut -d: -f1 | sort | uniq | xargs sed -i "s|$pattern|$replacement|g"
+  if [[ "$(uname)" == "Darwin" ]] ; then
+    # The endless small differences in the OSX shell environments are designed to strengthen us.
+    # https://stackoverflow.com/questions/4247068/sed-command-with-i-option-failing-on-mac-but-works-on-linux
+    rg --files-with-matches -- "$pattern" | xargs -n1 sed -i '' "s|$pattern|$replacement|g"
+  else
+    rg --files-with-matches -- "$pattern" | xargs -n1 sed -i "s|$pattern|$replacement|g"
+  fi
 }
 
 

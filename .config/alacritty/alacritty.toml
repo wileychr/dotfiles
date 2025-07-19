@@ -1,3 +1,14 @@
+[general]
+import = [
+  # A great place for settings like fonts and font sizes which are always different on different
+  # machines/screens. e.g.
+  #   [font.normal]
+  #   family = "InconsolataGo Nerd Font Mono"
+  #   [font]
+  #   size = 13
+  "~/.config/alacritty/local.toml"
+]
+
 [colors.bright]
 black = "#181818"
 blue = "#90b0d1"
@@ -26,14 +37,11 @@ yellow = "#cc8800"
 background = "#222222"
 foreground = "#c2c2b0"
 
-[font]
-size = 15
-
-[font.normal]
-family = "InconsolataGo Nerd Font Mono"
-
 [font.offset]
 y = -1
 
 [window]
 decorations = "None"
+
+[mouse]
+hide_when_typing = true

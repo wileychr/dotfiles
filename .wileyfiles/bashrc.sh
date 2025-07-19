@@ -132,6 +132,7 @@ bash_extensions=(
   # Probably we have installed via apt, but this is the default for manual install.
   "${HOME}/.fzf.bash"
   "${HOME}/.corp_rc"
+  "${HOME}/.local_rc"
 )
 for bash_extension in "${bash_extensions[@]}" ; do
 	test -f "$bash_extension" && source "$bash_extension"

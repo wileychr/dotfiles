@@ -214,3 +214,39 @@ function print_proc_mem {
   # Sum the proportional set size (Pss) of all the memory regions in the process.
   cat "/proc/$process_pid/smaps" | grep -i 'Pss:' |  awk '{Total+=$2} END {print Total}' | xargs -I{} echo {} kB
 }
+
+function _bazel_complete() {
+  local cached_targets
+  cached_targets="$HOME/.cache/bazel-autocomplete/$(pwd | sed 's|/|_|g;s|\.||g;').txt"
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  _get_comp_words_by_ref -n : cur
+  if [[ ! -f "${cached_targets}" ]]; then
+    echo -e "\nbuilding cache of all bazel targets in ${cached_targets}"
+    local cache_parent_dir
+    cache_parent_dir=`dirname "${cached_targets}"`
+    mkdir -p "${cache_parent_dir}"
+    bazel query //... | grep "//" >"${cached_targets}"
+    echo -e "\ndone building cache"
+  fi
+  if [[ ${#COMP_WORDS[@]} < 3 ]]; then
+    # COMPWORDS[0] == bazel
+    # COMPWORDS[1] is some fragment of a command (e.g. 'b', and we might complete it to 'build')
+    COMPREPLY=($(compgen -W "build query run test" "$cur"))
+  elif [[ ${#COMP_WORDS[@]} < 6 ]]; then
+    contents_without_colon=$(cat "${cached_targets}" | cut -d: -f1 )
+    for i in {3..5}; do
+      contents=$(echo "$contents_without_colon" | cut -d/ -f1-${i} | uniq)
+      possible_compreply=($(compgen -W "$contents" "$cur"))
+      if [[ ${#possible_compreply[@]} > 1 ]]; then
+        break
+      fi
+    done
+    if [[ ${#possible_compreply[@]} == 1 || ${#possible_compreply[@]} == 0 ]]; then
+      contents=$(cat "${cached_targets}")
+      possible_compreply=($(compgen -W "$contents" "$cur"))
+    fi
+    COMPREPLY+=(${possible_compreply[@]})
+  fi
+  __ltrim_colon_completions "$cur"
+}
+complete -F _bazel_complete bazel

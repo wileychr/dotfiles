@@ -60,7 +60,9 @@ return {
     -- v0.9.1 2023-12-01 latest tagged release
     -- commit = '63260da18bf273c76b8e2ea0db84eb901cab49ce',
     -- v0.9.2
-    commit = 'f197a15b0d1e8d555263af20add51450e5aaa1f0',
+    -- commit = 'f197a15b0d1e8d555263af20add51450e5aaa1f0',
+    -- v0.10.0
+    commit = '42fc28ba918343ebfd5565147a42a26580579482',
     run = function()
       local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
       ts_update()

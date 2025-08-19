@@ -247,10 +247,9 @@ require('lspconfig').pylsp.setup({
     -- capabilities = capabilities,
 })
 
-
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "go", "cpp", "python" },
+  ensure_installed = { "terraform", "c", "lua", "vim", "vimdoc", "query", "go", "cpp", "python" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -277,8 +276,9 @@ require'nvim-treesitter.configs'.setup {
     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
     -- the name of the parser)
     -- list of language that will be disabled
-    disable = { "c", "rust" },
+    disable = {"terraform", "c", "rust" },
     -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+    --[[
     disable = function(lang, buf)
         local max_filesize = 100 * 1024 -- 100 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
@@ -286,6 +286,7 @@ require'nvim-treesitter.configs'.setup {
             return true
         end
     end,
+    ]]--
 
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).

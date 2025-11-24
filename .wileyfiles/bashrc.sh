@@ -8,7 +8,7 @@
 [ -z "$PS1" ] && return
 
 function _currGitBranch() {
-  git branch 2> /dev/null | grep -e '\* ' | sed 's/^..\(.*\)/{\1}/'
+  git for-each-ref --contains=HEAD --format='%(refname:short)' refs/heads/ 2>/dev/null
 }
 color_green='\[\e[1;32m\]'
 color_yellow='\[\e[1;33m\]'
@@ -108,7 +108,11 @@ alias gs='git status'
 alias gss='git show --stat --oneline HEAD'
 alias gr='git rev-parse --show-toplevel'
 gnb() {
-	git checkout -t origin/master -b wiley/$@
+  if ( git branch -a | grep 'remotes/origin/master$' >/dev/null ) ; then
+    git checkout -t origin/master -b wiley/$@
+  else
+    git checkout -t origin/main -b wiley/$@
+  fi
 }
 # Git hall of fame
 alias git-hof=_git_hall_of_fame_impl

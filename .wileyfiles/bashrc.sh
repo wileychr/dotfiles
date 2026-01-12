@@ -8,12 +8,34 @@
 [ -z "$PS1" ] && return
 
 function _currGitBranch() {
-  git for-each-ref --contains=HEAD --format='%(refname:short)' refs/heads/ 2>/dev/null
+  local rev_parse_output
+  rev_parse_output=`git rev-parse --abbrev-ref HEAD 2>/dev/null`
+
+  if [ $? -ne 0 ] ; then
+    return
+  fi
+
+
+  if [[ "${rev_parse_output}" == "HEAD" ]] ; then
+    local git_root=`git rev-parse --show-toplevel`
+    local head_branch="${git_root}/.git/HEAD"
+    local master_branch="${git_root}/.git/refs/remotes/origin/master"
+    local main_branch="${git_root}/.git/refs/remotes/origin/main"
+    if cmp --silent "${head_branch}" "${master_branch}" ; then
+      rev_parse_output="origin/master"
+    elif cmp --silent "${head_branch}" "${main_branch}" ; then
+      rev_parse_output="origin/main"
+    else
+      rev_parse_output="detached HEAD"
+    fi
+  fi
+
+  echo "${rev_parse_output}"
 }
 color_green='\[\e[1;32m\]'
 color_yellow='\[\e[1;33m\]'
 color_reset='\[\e[0m\]'
-export PS1="${color_green}[\u@\h \W${color_yellow}\$(_currGitBranch)${color_green}]\$${color_reset} "
+export PS1="${color_green}[\u@\h \W${color_yellow}\$(_currGitBranch | xargs -I{} echo ' ({})' )${color_green}]\$${color_reset} "
 
 stty -ctlecho
 

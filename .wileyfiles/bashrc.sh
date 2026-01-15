@@ -15,7 +15,6 @@ function _currGitBranch() {
     return
   fi
 
-
   if [[ "${rev_parse_output}" == "HEAD" ]] ; then
     local git_root=`git rev-parse --show-toplevel`
     local head_branch="${git_root}/.git/HEAD"
@@ -259,7 +258,7 @@ function _bazel_complete() {
     # COMPWORDS[1] is some fragment of a command (e.g. 'b', and we might complete it to 'build')
     COMPREPLY=($(compgen -W "build query run test" "$cur"))
   elif [[ ${#COMP_WORDS[@]} < 6 ]]; then
-    contents_without_colon=$(cat "${cached_targets}" | cut -d: -f1 )
+    contents_without_colon=$(cat "${cached_targets}" | cut -d: -f1 | grep "${COMP_WORDS[-1]}")
     for i in {3..5}; do
       contents=$(echo "$contents_without_colon" | cut -d/ -f1-${i} | uniq)
       possible_compreply=($(compgen -W "$contents" "$cur"))
@@ -268,7 +267,7 @@ function _bazel_complete() {
       fi
     done
     if [[ ${#possible_compreply[@]} == 1 || ${#possible_compreply[@]} == 0 ]]; then
-      contents=$(cat "${cached_targets}")
+      contents=$(cat "${cached_targets}" | grep "${COMP_WORDS[-1]}")
       possible_compreply=($(compgen -W "$contents" "$cur"))
     fi
     COMPREPLY+=(${possible_compreply[@]})

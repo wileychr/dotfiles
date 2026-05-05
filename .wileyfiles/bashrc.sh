@@ -79,7 +79,7 @@ _untilFailImpl() {
 WILEY_SNIPPETS_DIR=${WILEY_SNIPPETS_DIR-$HOME}
 
 _snippets_impl() {
-	local snippets_file_prefix
+  local snippets_file_prefix
   local file_list
   local cmd="$HOME/.wileyfiles/snippets.py --snippets_dir $WILEY_SNIPPETS_DIR"
   if [[ "$#" != "0" ]] ; then
@@ -158,6 +158,8 @@ bash_extensions=(
   "${HOME}/.fzf.bash"
   "${HOME}/.corp_rc"
   "${HOME}/.local_rc"
+  "${HOME}/.nix-profile/etc/profile.d/bash_completion.sh"
+fi
 )
 for bash_extension in "${bash_extensions[@]}" ; do
 	test -f "$bash_extension" && source "$bash_extension"
@@ -275,3 +277,6 @@ function _bazel_complete() {
   __ltrim_colon_completions "$cur"
 }
 complete -F _bazel_complete bazel
+
+
+test -f "$HOME/.nix-profile/bin/direnv" && eval "$($HOME/.nix-profile/bin/direnv hook bash)"

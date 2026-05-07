@@ -1,28 +1,33 @@
+vim.pack.add({
+  {
+    src = "https://github.com/polirritmico/monokai-nightasty.nvim",
+    version = "1e9b92006782a1217d0a7a871b871768f1cbf5ed"
+  },
+  {
+    src = "https://github.com/nvim-treesitter/nvim-treesitter",
+    version = 'main'
+  },
+  {
+    src = "https://github.com/neovim/nvim-lspconfig",
+    -- latest 2026-05-07
+    version = "cd576dd72d31ddffcbfa6d064c0dd697ca218758"
+  },
+  {
+    -- The completion engine itself is called nvim-cmp
+    src = "https://github.com/hrsh7th/nvim-cmp",
+    -- latest 2026-05-07
+    version = "a1d504892f2bc56c2e79b65c6faded2fd21f3eca"
+  },
+  {
+    src = "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help",
+    -- latest 2026-05-07
+    version = "fd3e882e56956675c620898bf1ffcf4fcbe7ec84"
+  }
+})
+
 -- Set our leader key first so that plugins will have a consistent view
 vim.g.mapleader=","
 
--- Important paths for lazy.nvim:
---   ~/.local/share/nvim/lazy/lazy.nvim
---   ~/.local/state/nvim/lazy/lazy.nvim
---   ~/.config/nvim/lazy-lock.json
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
--- Install our package manager, lazy.nvim, if it isn't already.
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
--- Load plugins from ~/.config/nvim/lua/plugins.lua
-local plugin_spec = require("plugins")
-require("lazy").setup(plugin_spec)
 
 vim.cmd([[
 " set an alias for the Files command
@@ -58,7 +63,7 @@ filetype on
 filetype plugin on
 filetype indent on
 syntax on
-colorscheme monokai
+colorscheme monokai-nightasty
 
 au BufNewFile,BufRead Dockerfile.*      set filetype=dockerfile
 au BufNewFile,BufRead Makefile.*        set filetype=make
@@ -164,7 +169,7 @@ end
 GOPACKAGESDRIVER_PATH = cwd .. "/dev/go_packages_driver.bash"
 if (file_exists(GOPACKAGESDRIVER_PATH))
 then
-require('lspconfig').gopls.setup({
+vim.lsp.config('gopls', {
   on_attach = on_attach,
   -- cmd = {'gopls', '-rpc.trace', '--debug=localhost:6060'},
   settings = {
@@ -187,7 +192,7 @@ require('lspconfig').gopls.setup({
   },
 })
 else
-require('lspconfig').gopls.setup({
+vim.lsp.config('gopls', {
   on_attach = on_attach,
 })
 end
@@ -218,83 +223,50 @@ end
 
 PYTHON3_EXEC = get_venv_python3()
 
-require('lspconfig').pylsp.setup({
-    on_attach = on_attach,
-    cmd = {PYTHON3_EXEC, '-m', 'pylsp'},
-    -- See https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
-    settings = {
-      pylsp = {
-        plugins = {
-          jedi_completion = { fuzzy = true },
-          -- python3 -m pip install python-lsp-ruff
-          -- python3 -m pip install pylsp-mypy
-          pylsp_mypy = { enabled = true },
 
-          -- pylsp will try and enable these by default
-          pylint = { enabled = false },
-          pyflakes = { enabled = false },
-          pycodestyle = { enabled = false },
+vim.lsp.config('pylsp', {
+  on_attach = on_attach,
+  cmd = {PYTHON3_EXEC, '-m', 'pylsp'},
+  -- See https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
+  settings = {
+    pylsp = {
+      plugins = {
+        jedi_completion = { fuzzy = true },
+        -- python3 -m pip install python-lsp-ruff
+        -- python3 -m pip install pylsp-mypy
+        pylsp_mypy = { enabled = true },
 
-          ruff = { enabled = true },
-          pyls_isort = { enabled = true },
-          -- We want to use ruff for formatting. Unfortunately, pylsp requires us to disable all other alternatives.
-          autopep8 = { enabled = false },
-          yapf = { enabled = false },
-          black = { enabled = false },
-        },
+        -- pylsp will try and enable these by default
+        pylint = { enabled = false },
+        pyflakes = { enabled = false },
+        pycodestyle = { enabled = false },
+
+        ruff = { enabled = true },
+        pyls_isort = { enabled = true },
+        -- We want to use ruff for formatting. Unfortunately, pylsp requires us to disable all other alternatives.
+        autopep8 = { enabled = false },
+        yapf = { enabled = false },
+        black = { enabled = false },
       },
     },
-    -- capabilities = capabilities,
+  },
 })
 
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { "terraform", "c", "lua", "vim", "vimdoc", "query", "go", "cpp", "python" },
+TS_LANGUAGES = {"terraform", "c", "lua", "vim", "vimdoc", "query", "go", "cpp", "python"}
+require('nvim-treesitter').install(TS_LANGUAGES)
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-
-  -- List of parsers to ignore installing (for "all")
-  ignore_install = { "javascript" },
-
-  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
-  -- This seems to fix the issue where automatic indentation puts extra whitespace for me.
-  indent = {
-    enable = true,
-  },
-
-  highlight = {
-    enable = true,
-
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-    disable = {"terraform", "c", "rust" },
-    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-    --[[
-    disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-            return true
-        end
-    end,
-    ]]--
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-}
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = TS_LANGUAGES,
+  callback = function()
+    -- syntax highlighting, provided by Neovim
+    vim.treesitter.start()
+    -- folds, provided by Neovim
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.wo.foldmethod = 'expr'
+    -- indentation, provided by nvim-treesitter
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
+})
 
 local cmp = require("cmp")
 cmp.setup({

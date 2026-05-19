@@ -7,7 +7,7 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-function _currGitBranch() {
+function _gitCurrentBranch() {
   local rev_parse_output
   rev_parse_output=`git rev-parse --abbrev-ref HEAD 2>/dev/null`
 
@@ -31,10 +31,57 @@ function _currGitBranch() {
 
   echo "${rev_parse_output}"
 }
+
+function _gitNewBranch() {
+  if ( git branch -a | grep 'remotes/origin/master$' >/dev/null ) ; then
+    git checkout -t origin/master -b wiley/$@
+  else
+    git checkout -t origin/main -b wiley/$@
+  fi
+}
+
+function _gitNewWorktree() {
+  if [ $# -ne 1 ] ; then
+    echo usage "gnw WORKTREE_NAME"
+    return
+  fi
+  local git_root=`git rev-parse --show-toplevel`
+  local repo_name=`basename $git_root`
+  local worktree_root="$git_root/../$repo_name-worktrees/$1"
+  mkdir -p "$worktree_root"
+  git worktree add "$worktree_root" -b "wiley/$1"
+  pushd "$worktree_root"
+}
+
+function _memuseImpl() {
+  /bin/ps -u $(whoami) -o pid,rss,command | awk '{sum+=$2} END {print "Total " sum / 1024 " MB"}';
+}
+
+function _untilFailImpl() {
+  $@
+  while [ $? -eq 0 ]; do
+    $@
+  done
+}
+
+function _toJavaPackage() {
+  if [[ "$#" == "0" ]] ; then
+    # Run against stdin if we have no args
+    sed "s|.*/kotlin/\(.*\)|\1|" | sed "s|\(.*\)\.kt$|\1|" | sed "s|/|.|g"
+  else
+    # If we have command line arguments, pass them through our sed pipeline one by one.
+    local each
+    for each in $@ ; do
+      echo "$each" | (sed "s|.*/kotlin/\(.*\)|\1|" | sed "s|\(.*\)\.kt$|\1|" | sed "s|/|.|g")
+    done
+  fi
+}
+
+
 color_green='\[\e[1;32m\]'
 color_yellow='\[\e[1;33m\]'
 color_reset='\[\e[0m\]'
-export PS1="${color_green}[\u@\h \W${color_yellow}\$(_currGitBranch | xargs -I{} echo ' ({})' )${color_green}]\$${color_reset} "
+export PS1="${color_green}[\u@\h \W${color_yellow}\$(_gitCurrentBranch | xargs -I{} echo ' ({})' )${color_green}]\$${color_reset} "
 
 stty -ctlecho
 
@@ -60,19 +107,8 @@ done
 VIM_BINARY="$(which nvim || which vim || which vi)"
 export EDITOR="$VIM_BINARY"
 
-_memuseImpl() {
-  /bin/ps -u $(whoami) -o pid,rss,command | awk '{sum+=$2} END {print "Total " sum / 1024 " MB"}';
-}
-
 _git_hall_of_fame_impl() {
 git ls-files -z | xargs -0n1 git blame -w | ruby -n -e '$_ =~ /^.*?\((.*?)\s[\d]{4}/; puts $1.strip' | sort -f | uniq -c | sort -n
-}
-
-_untilFailImpl() {
-  $@
-  while [ $? -eq 0 ]; do
-    $@
-  done
 }
 
 # This is probably overridden in .corp_rc
@@ -124,17 +160,12 @@ alias vim="'$VIM_BINARY' -O"
 
 alias ga='git commit --all --amend -C HEAD'
 alias gb='git branch'
+alias gnb=_gitNewBranch
+alias gnw=_gitNewWorktree
 alias gc='git checkout'
 alias gs='git status'
 alias gss='git show --stat --oneline HEAD'
 alias gr='git rev-parse --show-toplevel'
-gnb() {
-  if ( git branch -a | grep 'remotes/origin/master$' >/dev/null ) ; then
-    git checkout -t origin/master -b wiley/$@
-  else
-    git checkout -t origin/main -b wiley/$@
-  fi
-}
 # Git hall of fame
 alias git-hof=_git_hall_of_fame_impl
 alias tm='tmux'
@@ -144,7 +175,7 @@ alias mem=_memuseImpl
 
 # For all those times when you have a file system path and want a java package
 # echo com/my/path | to_java_package
-alias to_java_package='sed "s|/|.|g"'
+alias to_java_package=_toJavaPackage
 
 alias snippets=_snippets_impl
 alias snippets_push=_snippets_push_impl
@@ -152,10 +183,6 @@ alias snippets_push=_snippets_push_impl
 alias untilfail=_untilFailImpl
 
 bash_extensions=(
-  /usr/share/doc/fzf/examples/key-bindings.bash
-  /usr/share/doc/fzf/examples/completion.bash
-  # Probably we have installed via apt, but this is the default for manual install.
-  "${HOME}/.fzf.bash"
   "${HOME}/.corp_rc"
   "${HOME}/.local_rc"
   "${HOME}/.nix-profile/etc/profile.d/bash_completion.sh"
@@ -166,6 +193,7 @@ for bash_extension in "${bash_extensions[@]}" ; do
 done
 
 if command -v fzf >/dev/null && command -v rg >/dev/null ; then
+  eval "$(fzf --bash)"
   # fzf has some default behavior when you invoke it like `fzf` to
   # search the result of running `find .`.  Make this respect
   # .gitignore (and be super fast) by using rg.

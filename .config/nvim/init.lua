@@ -124,42 +124,77 @@ set nofen
 
 vim.g.markdown_enable_spell_checking = false
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  local opts = { noremap=true, silent=true }
+vim.lsp.enable("gopls")
 
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('my.lsp', {}),
 
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>c', '<cmd>lua vim.lsp.buf.hover()<CR>', {
-    desc = "display hover information",
-    unpack(opts)
-  })
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.format({async=true})<CR>', {
-    desc = "format buffer",
-    unpack(opts)
-  })
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  callback = function(ev)
+    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
 
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', {
-    desc = "go to type definition",
-    unpack(opts)
-  })
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<F6>', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    --[[
+    if client:supports_method('textDocument/implementation') then
+      -- Create a keymap for vim.lsp.buf.implementation ...
+    end
 
-  vim.opt.tagfunc = "v:lua.vim.lsp.tagfunc"
-end
+
+    -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
+    if client:supports_method('textDocument/completion') then
+      -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+      -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+      -- client.server_capabilities.completionProvider.triggerCharacters = chars
+
+      vim.lsp.completion.enable(true, client.id, ev.buf, {autotrigger = true})
+    end
+
+    -- Auto-format ("lint") on save.
+    -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+    if not client:supports_method('textDocument/willSaveWaitUntil')
+        and client:supports_method('textDocument/formatting') then
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        group = vim.api.nvim_create_augroup('my.lsp', {clear=false}),
+        buffer = ev.buf,
+        callback = function()
+          vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
+        end,
+      })
+    end
+    ]]--
+
+    local keymap_opts = { noremap=true, silent=true }
+
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(ev.buf, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- Mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', keymap_opts)
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', keymap_opts)
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<leader>c', '<cmd>lua vim.lsp.buf.hover()<CR>', {
+      desc = "display hover information",
+      unpack(keymap_opts)
+    })
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<space>f', '<cmd>lua vim.lsp.buf.format({async=true})<CR>', {
+      desc = "format buffer",
+      unpack(keymap_opts)
+    })
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', keymap_opts)
+
+    -- vim.api.nvim_buf_set_keymap(ev.buf, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', keymap_opts)
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', keymap_opts)
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', keymap_opts)
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', keymap_opts)
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', keymap_opts)
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', {
+      desc = "go to type definition",
+      unpack(keymap_opts)
+    })
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', '<F6>', '<cmd>lua vim.lsp.buf.rename()<CR>', keymap_opts)
+    vim.api.nvim_buf_set_keymap(ev.buf, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', keymap_opts)
+
+    vim.opt.tagfunc = "v:lua.vim.lsp.tagfunc"
+  end,
+})
 
 cwd = os.getenv("PWD") or io.popen("cd"):read()
 function file_exists(name)
@@ -170,7 +205,6 @@ GOPACKAGESDRIVER_PATH = cwd .. "/dev/go_packages_driver.bash"
 if (file_exists(GOPACKAGESDRIVER_PATH))
 then
 vim.lsp.config('gopls', {
-  on_attach = on_attach,
   -- cmd = {'gopls', '-rpc.trace', '--debug=localhost:6060'},
   settings = {
     gopls = {
@@ -193,7 +227,6 @@ vim.lsp.config('gopls', {
 })
 else
 vim.lsp.config('gopls', {
-  on_attach = on_attach,
 })
 end
 

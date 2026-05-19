@@ -1,0 +1,29 @@
+{
+  "plugins": {
+    "cmp-nvim-lsp-signature-help": {
+      "rev": "fd3e882e56956675c620898bf1ffcf4fcbe7ec84",
+      "src": "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help",
+      "version": "'fd3e882e56956675c620898bf1ffcf4fcbe7ec84'"
+    },
+    "monokai-nightasty.nvim": {
+      "rev": "1e9b92006782a1217d0a7a871b871768f1cbf5ed",
+      "src": "https://github.com/polirritmico/monokai-nightasty.nvim",
+      "version": "'1e9b92006782a1217d0a7a871b871768f1cbf5ed'"
+    },
+    "nvim-cmp": {
+      "rev": "a1d504892f2bc56c2e79b65c6faded2fd21f3eca",
+      "src": "https://github.com/hrsh7th/nvim-cmp",
+      "version": "'a1d504892f2bc56c2e79b65c6faded2fd21f3eca'"
+    },
+    "nvim-lspconfig": {
+      "rev": "cd576dd72d31ddffcbfa6d064c0dd697ca218758",
+      "src": "https://github.com/neovim/nvim-lspconfig",
+      "version": "'cd576dd72d31ddffcbfa6d064c0dd697ca218758'"
+    },
+    "nvim-treesitter": {
+      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'main'"
+    }
+  }
+}

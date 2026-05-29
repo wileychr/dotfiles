@@ -124,6 +124,26 @@ set nofen
 
 vim.g.markdown_enable_spell_checking = false
 
+--[[
+Spell checking. Enabled only for prose-y filetypes so it doesn't flag code.
+Custom/accepted words are saved to spellfile when you add them with `zg`.
+Using it — misspelled words get underlined/highlighted. Cursor on a flagged word:
+  - ]s / [s — jump to next / previous misspelling
+  - z= — show suggestions (pick a number to replace)
+  - zg — add the word to your dictionary as good (saved to the spellfile)
+  - zw — mark a word as wrong
+  - zug — undo a zg
+]]--
+
+vim.opt.spelllang = "en_us"
+vim.opt.spellfile = os.getenv("HOME") .. "/.config/nvim/spell/en.utf-8.add"
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "text", "gitcommit", "tex", "rst" },
+  callback = function()
+    vim.opt_local.spell = true
+  end,
+})
+
 vim.lsp.enable("gopls")
 
 vim.api.nvim_create_autocmd('LspAttach', {

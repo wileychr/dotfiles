@@ -96,6 +96,7 @@ additional_path_components=(
   "/usr/local/go/bin"
   "$GOPATH/bin"
   "$HOME/.local/bin"
+  "$HOME/.bun/bin"
 )
 
 for path_component in "${additional_path_components[@]}" ; do

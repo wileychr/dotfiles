@@ -168,7 +168,16 @@ alias egrep='egrep --color=auto'
 alias vi="'$VIM_BINARY' -O"
 alias vim="'$VIM_BINARY' -O"
 
-alias ghprc='gh pr create --reviewer $(gh api repos/:owner/:repo/collaborators --jq ".[].login" | fzf -m | paste -sd, -)'
+function _create_pr() {
+  local reviewers=$(
+    gh api repos/:owner/:repo/collaborators --jq ".[].login" \
+      | fzf -m --marker='>' --header="select reviewers, tab to multi-select" \
+      | paste -sd, -
+  )
+  echo "selected $reviewers to review"
+  gh pr create --reviewer "$reviewers"
+}
+alias ghprc=_create_pr
 
 alias ga='git commit --all --amend -C HEAD'
 alias gb='git branch'

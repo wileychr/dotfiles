@@ -19,6 +19,16 @@ vim.pack.add({
     version = "a1d504892f2bc56c2e79b65c6faded2fd21f3eca"
   },
   {
+    src = "https://github.com/ellisonleao/gruvbox.nvim",
+    -- latest 2026-06-18
+    version = "154eb5ff5b96d0641307113fa385eaf0d36d9796"
+  },
+  {
+    src = "https://github.com/ibhagwan/fzf-lua",
+    -- latest 2026-06-18
+    version = "267f5db2aa2202b9f6cc7a50783f0ccd2121766c"
+  },
+  {
     src = "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help",
     -- latest 2026-05-07
     version = "fd3e882e56956675c620898bf1ffcf4fcbe7ec84"
@@ -30,22 +40,8 @@ vim.g.mapleader=","
 
 
 vim.cmd([[
-" set an alias for the Files command
-nnoremap <Leader>t :Files<CR>
-" Note that there is a trailing space on the next line intentionally.
-nnoremap <Leader>f :Rg 
-nnoremap <silent> <C-j> :RG <C-r><C-w><CR>
-
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--disabled', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  let spec = fzf#vim#with_preview(spec, 'right', 'ctrl-/')
-  call fzf#vim#grep(initial_command, 1, spec, a:fullscreen)
-endfunction
-
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+nnoremap <Leader>t :FzfLua files<CR>
+nnoremap <Leader>f :FzfLua grep_project<CR>
 ]])
 
 vim.cmd([[
@@ -63,7 +59,7 @@ filetype on
 filetype plugin on
 filetype indent on
 syntax on
-colorscheme monokai-nightasty
+" colorscheme monokai-nightasty
 
 au BufNewFile,BufRead Dockerfile.*      set filetype=dockerfile
 au BufNewFile,BufRead Makefile.*        set filetype=make
@@ -119,7 +115,6 @@ set novisualbell
 set undolevels=1000           " number of undos stored
 set whichwrap=<,>,h,l,[,]
 set nofen
-
 ]])
 
 vim.g.markdown_enable_spell_checking = false
@@ -305,7 +300,21 @@ vim.lsp.config('pylsp', {
   },
 })
 
-TS_LANGUAGES = {"terraform", "c", "lua", "vim", "vimdoc", "query", "go", "cpp", "python"}
+TS_LANGUAGES = {
+  "c",
+  "cpp",
+  "go",
+  "json",
+  "kotlin",
+  "lua",
+  "markdown",
+  "python",
+  "query",
+  "sql",
+  "terraform",
+  "vim",
+  "vimdoc",
+}
 require('nvim-treesitter').install(TS_LANGUAGES)
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -386,3 +395,10 @@ cmp.setup({
     { name = 'nvim_lsp_signature_help' }
   }
 })
+
+require("gruvbox").setup({
+  inverse = true, -- invert background for search, diffs, statuslines and errors
+  contrast = "hard", -- can be "hard", "soft" or empty string
+})
+vim.cmd.colorscheme("gruvbox")
+

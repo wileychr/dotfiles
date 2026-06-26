@@ -109,7 +109,16 @@ VIM_BINARY="$(which nvim || which vim || which vi)"
 export EDITOR="$VIM_BINARY"
 
 _git_hall_of_fame_impl() {
-git ls-files -z | xargs -0n1 git blame -w | ruby -n -e '$_ =~ /^.*?\((.*?)\s[\d]{4}/; puts $1.strip' | sort -f | uniq -c | sort -n
+# | ruby -n -e '$_ =~ /^.*?\((.*?)\s[\d]{4}/; puts $1.strip'
+git ls-files \
+  | grep -v .csv$ \
+  | grep -v .json$ \
+  | grep -v .xml$ \
+  | xargs -n1 git blame -w \
+  | python3 -c  'import sys, re; sys.stdin.reconfigure(errors="ignore"); [print(m.group(1)) for line in sys.stdin for m in [re.search(r"^[a-f0-9]+\s+\((.*?)\s+\d{4}-\d{2}-\d{2}", line)] if m]' \
+  | sort -f \
+  | uniq -c \
+  | sort -nr
 }
 
 # This is probably overridden in .corp_rc
@@ -158,6 +167,8 @@ alias egrep='egrep --color=auto'
 
 alias vi="'$VIM_BINARY' -O"
 alias vim="'$VIM_BINARY' -O"
+
+alias ghprc='gh pr create --reviewer $(gh api repos/:owner/:repo/collaborators --jq ".[].login" | fzf -m | paste -sd, -)'
 
 alias ga='git commit --all --amend -C HEAD'
 alias gb='git branch'
@@ -217,7 +228,8 @@ fi
 function replace {
   local pattern="$1"
   local replacement="$2"
-  if [[ "$(uname)" == "Darwin" ]] ; then
+  (sed --version | grep GNU >/dev/null 2>&1)
+  if [ $? -ne 0 ] ; then
     # The endless small differences in the OSX shell environments are designed to strengthen us.
     # https://stackoverflow.com/questions/4247068/sed-command-with-i-option-failing-on-mac-but-works-on-linux
     rg --files-with-matches -- "$pattern" | xargs -n1 sed -i '' "s|$pattern|$replacement|g"
